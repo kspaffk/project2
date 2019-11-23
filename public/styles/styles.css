@@ -1,15 +1,11 @@
 body {
-  font-family: 'Ubuntu Condensed', sans-serif;
-  font-size: 18px;
+  font-family: "Ubuntu Condensed", sans-serif;
+  font-size: 20px;
 }
 
 .title {
-  font-family: 'Libre Barcode 128 Text', cursive;
-  font-size: 60px;
+  font-family: "Libre Barcode 128 Text", cursive;
+  font-size: 75px;
   padding: 20px;
   margin-bottom: 20px;
-}
-
-.list-group-item {
-  line-height: 2.5;
 }
