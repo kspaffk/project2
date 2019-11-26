@@ -19,10 +19,19 @@ function createJSON(str) {
     header: true
   };
   var jsonObject = Papa.parse(str, config).data;
-  var jsonString = JSON.stringify(jsonObject);
+  var jsonArray = [];
+  jsonObject.forEach(i => {
+    if (i.serNum != "") {
+      jsonArray.push(i.serNum);
+    }
+  });
+  console.log(jsonArray);
 
-  $.post("/api/assets", jsonString).then(function(data) {
-    console.log(data);
-    dropzone.el.value = "The CSV file was uploaded succesfully.";
+  jsonString = JSON.stringify(jsonArray);
+
+  $.ajax({
+    type: "POST",
+    url: "/api/assets",
+    data: jsonString,
   });
 }
