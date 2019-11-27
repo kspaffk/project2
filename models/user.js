@@ -34,6 +34,12 @@ module.exports = function(sequelize, DataTypes) {
       validate: {
         len: [8, 20]
       }
+    },
+    empID: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
     }
   });
 
