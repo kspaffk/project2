@@ -13,4 +13,5 @@ module.exports = function(sequelize, DataTypes) {
   Department.associate = function(models) {
     Department.belongsTo(models.User);
   };
+  return Department;
 };
