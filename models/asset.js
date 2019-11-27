@@ -7,18 +7,22 @@ module.exports = function(sequelize, DataTypes) {
         len: [1, 20]
       }
     },
-      description: DataTypes.STRING,
-      itemName: DataTypes.STRING,
-      purchaseDate: DataTypes.DATE,
-      assignDate: DataTypes.DATE,
-      retiredDate: DataTypes.DATE
+    description: DataTypes.STRING,
+    itemName: DataTypes.STRING,
+    purchaseDate: DataTypes.DATE,
+    assignDate: DataTypes.DATE,
+    retiredDate: DataTypes.DATE
   });
 
   Asset.associate = function(models) {
-    Asset.hasMany(models.ItemType);
-    Asset.hasMany(models.User);
-    Asset.hasMany(models.Status);
-    Asset.hasMany(models.Return);
+    Asset.hasOne(models.ItemType);
+    Asset.hasOne(models.User, {
+      allowNull: true
+    });
+    Asset.hasOne(models.Status);
+    Asset.hasMany(models.Return, {
+      allowNull: true
+    });
   };
 
   return Asset;
