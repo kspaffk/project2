@@ -5,17 +5,13 @@ module.exports = function(sequelize, DataTypes) {
 
   Return.associate = function(models) {
     Return.belongsTo(models.Asset, {
-      foreignKey: {
-        name: "id",
-        allowNull: true
-      }
+      allowNull: true,
+      onDelete: "SET NULL"
     });
 
     Return.belongsTo(models.User, {
-      foreignKey: {
-        name: "empID",
-        allowNull: true
-      }
+      allowNull: true,
+      onDelete: "SET NULL"
     });
   };
   return Return;

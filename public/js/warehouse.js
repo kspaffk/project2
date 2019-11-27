@@ -19,15 +19,7 @@ function createJSON(str) {
     header: true
   };
   var jsonObject = Papa.parse(str, config).data;
-  var jsonArray = [];
-  jsonObject.forEach(i => {
-    if (i.serNum != "") {
-      jsonArray.push(i.serNum);
-    }
-  });
-  console.log(jsonArray);
-
-  jsonString = JSON.stringify(jsonArray);
+  jsonString = JSON.stringify(jsonObject);
 
   $.ajax({
     type: "POST",
