@@ -48,9 +48,8 @@ module.exports = function(sequelize, DataTypes) {
       foreignKey: "id",
       allowNull: false
     });
-    User.hasMany(models.Asset, {
-      foreignKey: "id",
-      allowNull: true
+    User.belongsTo(models.Asset, { 
+      constraints: false 
     });
     User.hasMany(models.Return, {
       allowNull: true

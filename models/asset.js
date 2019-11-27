@@ -5,35 +5,21 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       validate: {
         len: [1, 20]
-      },
+      }
+    },
       description: DataTypes.STRING,
       itemName: DataTypes.STRING,
       purchaseDate: DataTypes.DATE,
       assignDate: DataTypes.DATE,
       retiredDate: DataTypes.DATE
-    }
   });
 
   Asset.associate = function(models) {
-    Asset.hasOne(models.ItemType, {
-      foreignKey: {
-        name: "id",
-        allowNull: true
-      }
-    });
-    Asset.belongsTo(models.User);
-    Asset.hasOne(models.Status, {
-      foreignKey: {
-        name: "id",
-        allowNull: false
-      }
-    });
-    Asset.hasMany(models.Return, {
-      foreignKey: {
-        name: "id",
-        allowNull: true
-      }
-    });
+    Asset.hasMany(models.ItemType);
+    Asset.hasMany(models.User);
+    Asset.hasMany(models.Status);
+    Asset.hasMany(models.Return);
   };
+
   return Asset;
 };

@@ -6,8 +6,8 @@ module.exports = function(sequelize, DataTypes) {
       validate: {
         len: [1, 15]
       },
-      description: DataTypes.STRING
-    }
+    },
+    description: DataTypes.STRING
   });
 
   Status.associate = function(models) {

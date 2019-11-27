@@ -6,12 +6,12 @@ module.exports = function(sequelize, DataTypes) {
       validate: {
         len: [1, 20]
       },
-      description: DataTypes.STRING
-    }
+    },
+    description: DataTypes.STRING
   });
 
   Department.associate = function(models) {
-    Department.belongsTo(models.User);
+    Department.belongsTo(models.User, { constraints: false });
   };
   return Department;
 };

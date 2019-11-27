@@ -11,7 +11,8 @@ module.exports = function(sequelize, DataTypes) {
 
   ItemType.associate = function(models) {
     ItemType.belongsTo(models.Asset, {
-      allowNull: true
+      allowNull: true,
+      constraints: false
     });
   };
 
