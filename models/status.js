@@ -1,17 +1,17 @@
 module.exports = function(sequelize, DataTypes) {
-  var Role = sequelize.define("Role", {
-    roleName: {
+  var Status = sequelize.define("Status", {
+    statusName: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [1, 10]
+        len: [1, 15]
       },
       description: DataTypes.STRING
     }
   });
 
-  Role.associate = function(models) {
-    Role.belongsTo(models.User);
+  Status.associate = function(models) {
+    Status.belongsTo(models.Asset);
   };
-  return Role;
+  return Status;
 };
