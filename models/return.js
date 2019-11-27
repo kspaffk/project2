@@ -4,14 +4,14 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Return.associate = function(models) {
-    Return.hasOne(models.Asset, {
+    Return.belongsTo(models.Asset, {
       foreignKey: {
         name: "id",
         allowNull: true
       }
     });
 
-    Return.hasOne(models.User, {
+    Return.belongsTo(models.User, {
       foreignKey: {
         name: "empID",
         allowNull: true

@@ -36,7 +36,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     empID: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
@@ -48,16 +48,17 @@ module.exports = function(sequelize, DataTypes) {
       foreignKey: "id",
       allowNull: false
     });
-  };
-  User.associate = function(models) {
-    User.belongsTo(models.Asset, {
-      allowNull: true
-    });
-  };
-  User.associate = function(models) {
     User.hasMany(models.Asset, {
+      foreignKey: "id",
       allowNull: true
     });
+    User.hasMany(models.Return, {
+      allowNull: true
+    });
+    User.hasOne(models.Department, {
+      allowNull: false
+    });
   };
+
   return User;
 };

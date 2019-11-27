@@ -21,12 +21,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       }
     });
-    Asset.hasOne(models.User, {
-      foreignKey: {
-        name: "empID",
-        allowNull: true
-      }
-    });
+    Asset.belongsTo(models.User);
     Asset.hasOne(models.Status, {
       foreignKey: {
         name: "id",
