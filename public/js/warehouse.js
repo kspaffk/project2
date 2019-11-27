@@ -7,7 +7,7 @@ dropzone.event("send", function(files) {
     file.readData(
       createJSON,
       function(e) {
-        alert("Terrible Error!");
+        console.log("There was an error reading the file: " + e);
       },
       "text"
     );
@@ -15,12 +15,24 @@ dropzone.event("send", function(files) {
 });
 
 function createJSON(str) {
-  dropzone.el.value = str;
   var config = {
     header: true
   };
   var jsonObject = Papa.parse(str, config).data;
-  var jsonString = JSON.stringify(jsonObject);
+  var jsonArray = [];
+  jsonObject.forEach(i => {
+    if (i.serNum != "") {
+      jsonArray.push(i.serNum);
+    }
+  });
+  console.log(jsonArray);
 
-  jsonzone.value = jsonString;
+  jsonString = JSON.stringify(jsonArray);
+
+  $.ajax({
+    type: "POST",
+    url: "/api/assets",
+    contentType: 'application/json',
+    data: jsonString,
+  });
 }
