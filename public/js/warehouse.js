@@ -32,6 +32,7 @@ function createJSON(str) {
   $.ajax({
     type: "POST",
     url: "/api/assets",
+    contentType: 'application/json',
     data: jsonString,
   });
 }

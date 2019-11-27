@@ -1,4 +1,4 @@
-var db = require("../models");
+-+ar db = require("../models");
 
 module.exports = function(app) {
   // Get all examples
@@ -10,8 +10,7 @@ module.exports = function(app) {
 
   // Create a new example
   app.post("/api/assets", function(req, res) {
-    var array = req.body;
-    console.log(req.body)
+    console.log(req.body)/
     res.json(req.body);
   });
 
