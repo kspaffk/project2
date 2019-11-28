@@ -22,21 +22,56 @@ $(document).ready(function() {
 });
 
 var assignAsset = function() {
-    var header = $("<div>")
-        .addClass("body-header")
-        .text("Assign Asset");
-    var selectAsset = $("<select>").attr("id", "select-asset");
+    $.get("/api/users/", function(users) {
+        $.get("/api/assets/", function(assets) {
+            var header = $("<div>")
+                .addClass("sub-header")
+                .text("Assign Asset");
+            var description = $("<div>")
+                .addClass("description")
+                .text(
+                    "To assign an asset to a user, choose a user and an asset below and click Assign"
+                );
 
-    var selectUser = $("<select>").attr("id", "select-user");
+            var selectAsset = $("<select>").attr("id", "select-asset");
+            assets.forEach(asset => {
+                var option = $("<option>")
+                    .attr("value", asset.id)
+                    .text(asset.serialNumber);
+                selectAsset.append(option);
+            });
 
-    $(".container").append(header);
+            var selectUser = $("<select>").attr("id", "select-user");
+            users.forEach(user => {
+                var option = $("<option>")
+                    .attr("value", user.empID)
+                    .text(user.firstName + " " + user.lastName);
+                selectUser.append(option);
+            });
+
+            var btnDiv = $("<div>").addClass("button-div");
+            var button = $("<button>")
+                .attr({
+                    type: "button",
+                    value: "Selected option",
+                    id: "but-read"
+                })
+                .addClass("btn-green")
+                .text("Assign");
+            btnDiv.append(button);
+            $(".container").append(header, selectUser, selectAsset, btnDiv);
+            $("#select-user, #select-asset").select2();
+        });
+    });
 };
 
 var createBulk = function() {
     var header = $("<div>")
         .addClass("body-header")
         .text("Bulk Create Assets");
-    var dropCSV = $("<div>").attr("id", "dropcsv").text("Drop your CSV file here!")
+    var dropCSV = $("<div>")
+        .attr("id", "dropcsv")
+        .text("Drop your CSV file here!");
 
     $(".container").append(header, dropCSV);
 
