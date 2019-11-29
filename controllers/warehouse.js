@@ -7,8 +7,8 @@ var bulkInsert = function(object) {
             models.Asset.findOrCreate({ where: item })
             .spread(function(asset, created){           
                 if (!created) {
-                    console.log(`*******************\n${asset.serialNumber}\n*****************`)
-                  exists.push(asset);
+                  exists.push(asset.serialNumber);
+                  console.log(`************************\n!!array!!${exists}\n***************************`);
                 }
             });
         }
