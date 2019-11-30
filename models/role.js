@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
   );
 
   Role.associate = function(models) {
-    Role.belongsTo(models.User, {
+    Role.hasOne(models.User, {
       onDelete: "SET NULL"
     });
   };

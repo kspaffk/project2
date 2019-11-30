@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
   );
 
   ItemType.associate = function(models) {
-    ItemType.belongsTo(models.Asset, {
+    ItemType.hasOne(models.Asset, {
       onDelete: "SET NULL"
     });
   };

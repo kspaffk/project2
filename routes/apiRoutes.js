@@ -13,9 +13,18 @@ module.exports = function(app) {
       res.json(users);
     });
   });
-  
+
   app.post("/api/assets", function(req, res) {
     console.log(req.body);
     whController.bulkInsert(req.body);
+  });
+
+  app.post("/api/assets/assign", function(req, res) {
+    db.Asset.update(
+      { UserEmpID: req.body.UserEmpID },
+      { where: { id: req.body.id } }
+    ).then(function(data) {
+      res.json(data);
+    });
   });
 };

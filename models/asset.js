@@ -15,11 +15,11 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Asset.associate = function(models) {
-    Asset.hasOne(models.ItemType);
-    Asset.hasOne(models.User, {
+    Asset.belongsTo(models.ItemType);
+    Asset.belongsTo(models.User, {
       allowNull: true
     });
-    Asset.hasOne(models.Status);
+    Asset.belongsTo(models.Status);
     Asset.hasMany(models.Return, {
       allowNull: true
     });

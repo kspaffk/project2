@@ -54,20 +54,37 @@ var assignAsset = function() {
                 .attr({
                     type: "button",
                     value: "Selected option",
-                    id: "but-read"
+                    id: "btn-assign"
                 })
                 .addClass("btn-green")
                 .text("Assign");
             btnDiv.append(button);
-            $(".container").append(header, selectUser, selectAsset, btnDiv);
+            $(".container").append(header, description, selectUser, selectAsset, btnDiv);
             $("#select-user, #select-asset").select2();
+
+            $("#btn-assign").on("click", function(event) {
+                var assetID = $('#select-asset').val();
+                var userEmpID = $('#select-user').val();
+                var assignJSON = JSON.stringify({"UserEmpID": userEmpID, "id": assetID});
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/assets/assign",
+                    contentType: "application/json",
+                    data: assignJSON
+                }).then(function(data) {
+                    console.log("*************************");
+                    console.log(data);
+                    console.log("*************************");
+                });
+            });
         });
     });
 };
 
 var createBulk = function() {
     var header = $("<div>")
-        .addClass("body-header")
+        .addClass("sub-header")
         .text("Bulk Create Assets");
     var dropCSV = $("<div>")
         .attr("id", "dropcsv")

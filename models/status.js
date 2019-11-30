@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
   );
 
   Status.associate = function(models) {
-    Status.belongsTo(models.Asset, {
+    Status.hasOne(models.Asset, {
       onDelete: "SET NULL"
     });
   };
