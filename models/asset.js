@@ -1,3 +1,5 @@
+var connection = require("../config/connection");
+
 module.exports = function(sequelize, DataTypes) {
   var Asset = sequelize.define("Asset", {
     serialNumber: {
