@@ -44,14 +44,14 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   User.associate = function(models) {
-    User.hasOne(models.Role);
-    User.belongsTo(models.Asset, {
+    User.belongsTo(models.Role);
+    User.hasMany(models.Asset, {
       onDelete: "SET NULL"
     });
     User.hasMany(models.Return, {
       allowNull: true
     });
-    User.hasOne(models.Department);
+    User.belongsTo(models.Department);
   };
 
   return User;

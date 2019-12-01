@@ -1,108 +1,199 @@
 $(document).ready(function() {
-    $(".assign-asset").on("click", function(event) {
-        $(".container").empty();
-        assignAsset();
-    });
-    $(".create-one-asset").on("click", function(event) {
-        $(".container").empty();
-    });
-    $(".edit-one-asset").on("click", function(event) {
-        $(".container").empty();
-    });
-    $(".return-one-asset").on("click", function(event) {
-        $(".container").empty();
-    });
-    $(".create-bulk-asset").on("click", function(event) {
-        $(".container").empty();
-        createBulk();
-    });
-    $(".return-bulk-asset").on("click", function(event) {
-        $(".container").empty();
-    });
+  $(".assign-asset").on("click", function(event) {
+    $(".container").empty();
+    assignAsset();
+  });
+  $(".create-one-asset").on("click", function(event) {
+    $(".container").empty();
+  });
+  $(".edit-one-asset").on("click", function(event) {
+    $(".container").empty();
+  });
+  $(".return-one-asset").on("click", function(event) {
+    $(".container").empty();
+  });
+  $(".create-bulk-asset").on("click", function(event) {
+    $(".container").empty();
+    createBulk();
+  });
+  $(".return-bulk-asset").on("click", function(event) {
+    $(".container").empty();
+  });
+});
+
+$(".sidebar-header").text("Warehouse");
+$(".sidebar-header").on("click", function() {
+    $(location).attr("href", "/warehouse/");
 });
 
 var assignAsset = function() {
-    $.get("/api/users/", function(users) {
-        $.get("/api/assets/", function(assets) {
-            var header = $("<div>")
-                .addClass("sub-header")
-                .text("Assign Asset");
-            var description = $("<div>")
-                .addClass("description")
-                .text(
-                    "To assign an asset to a user, choose a user and an asset below and click Assign"
-                );
+  $.get("/api/users/", function(users) {
+    $.get("/api/assets/", function(assets) {
+      var header = $("<div>")
+        .addClass("sub-header")
+        .text("Assign Asset");
+      var description = $("<div>")
+        .addClass("description")
+        .html(
+          "<p>To assign an asset to a user, choose a user and an asset below and click <span class='code'>Assign</span></p>"
+        );
 
-            var selectAsset = $("<select>").attr("id", "select-asset");
-            assets.forEach(asset => {
-                var option = $("<option>")
-                    .attr("value", asset.id)
-                    .text(asset.serialNumber);
-                selectAsset.append(option);
-            });
+      var selectAsset = $("<select>").attr("id", "select-asset");
+      assets.forEach(asset => {
+        var option = $("<option>")
+          .attr("value", asset.id)
+          .text(asset.serialNumber);
+        selectAsset.append(option);
+      });
 
-            var selectUser = $("<select>").attr("id", "select-user");
-            users.forEach(user => {
-                var option = $("<option>")
-                    .attr("value", user.empID)
-                    .text(user.firstName + " " + user.lastName);
-                selectUser.append(option);
-            });
+      var selectUser = $("<select>").attr("id", "select-user");
+      users.forEach(user => {
+        var option = $("<option>")
+          .attr("value", user.empID)
+          .text(user.firstName + " " + user.lastName);
+        selectUser.append(option);
+      });
 
-            var btnDiv = $("<div>").addClass("button-div");
-            var button = $("<button>")
-                .attr({
-                    type: "button",
-                    value: "Selected option",
-                    id: "but-read"
-                })
-                .addClass("btn-green")
-                .text("Assign");
-            btnDiv.append(button);
-            $(".container").append(header, selectUser, selectAsset, btnDiv);
-            $("#select-user, #select-asset").select2();
+      var btnDiv = $("<div>").addClass("button-div");
+      var button = $("<button>")
+        .attr({
+          type: "button",
+          value: "Selected option",
+          id: "btn-assign"
+        })
+        .addClass("btn-green")
+        .text("Assign");
+      btnDiv.append(button);
+      $(".container").append(
+        header,
+        description,
+        selectUser,
+        selectAsset,
+        btnDiv
+      );
+      $("#select-user, #select-asset").select2();
+
+      $("#btn-assign").on("click", function(event) {
+        var assetID = $("#select-asset").val();
+        var userEmpID = $("#select-user").val();
+        var assignJSON = JSON.stringify({ UserEmpID: userEmpID, id: assetID });
+
+        $.ajax({
+          type: "POST",
+          url: "/api/assets/assign",
+          contentType: "application/json",
+          data: assignJSON
+        }).then(function(data) {
+          console.log("*************************");
+          console.log(data);
+          console.log("*************************");
         });
+      });
     });
+  });
 };
 
 var createBulk = function() {
-    var header = $("<div>")
-        .addClass("body-header")
-        .text("Bulk Create Assets");
-    var dropCSV = $("<div>")
-        .attr("id", "dropcsv")
-        .text("Drop your CSV file here!");
+  var header = $("<div>")
+    .addClass("sub-header")
+    .text("Bulk Create Assets");
+  var errorDiv = $("<div>").addClass("error-txt");
 
-    $(".container").append(header, dropCSV);
+  var instructions = $("<div>")
+    .addClass("description")
+    .html(
+      "<p>The CSV file must have a header with the following columns headings matching the same letter case:</p><ul class='code'><li>serialNumber</li><li>itemName</li><li>purchaseDate</li></ul><p><span class='code'>purchaseDate</span> must be in the following format: <span class='code'>MM/DD/YYYY</span>.<p><span class='code'>itemName</span> should be the model name where possible</p>"
+    );
+  var dropCSV = $("<div>")
+    .attr("id", "dropcsv")
+    .text("Drop your CSV file here!");
 
-    // FileDrop and PapaParse section for importing CSV files
-    var options = { input: false };
-    var dropzone = new FileDrop("dropcsv", options);
+  $(".container").append(header, errorDiv, instructions, dropCSV);
 
-    dropzone.event("send", function(files) {
-        files.each(function(file) {
-            file.readData(
-                createJSON,
-                function(e) {
-                    console.log("There was an error reading the file: " + e);
-                },
-                "text"
-            );
-        });
+  // FileDrop and PapaParse section for importing CSV files
+  var options = { input: false };
+  var dropzone = new FileDrop("dropcsv", options);
+
+  dropzone.event("send", function(files) {
+    files.each(function(file) {
+      file.readData(
+        createJSONFromCSV,
+        function(e) {
+          console.log("There was an error reading the file: " + e);
+        },
+        "text"
+      );
     });
+  });
 
-    function createJSON(str) {
-        var config = {
-            header: true
-        };
-        var jsonObject = Papa.parse(str, config).data;
-        jsonString = JSON.stringify(jsonObject);
+  function createJSONFromCSV(str) {
+    var config = {
+      header: true
+    };
 
-        $.ajax({
-            type: "POST",
-            url: "/api/assets",
-            contentType: "application/json",
-            data: jsonString
-        });
+    validCSVArray = [];
+
+    var jsonObject = Papa.parse(str, config).data;
+    jsonObject.forEach(line => {
+      if (
+        line.serialNumber != "" &&
+        line.serialNumber &&
+        line.purchaseDate &&
+        line.itemName
+      ) {
+        line.purchaseDate = formatDate(line.purchaseDate);
+        validCSVArray.push(line);
+      }
+    });
+    if (validCSVArray.length < 1) {
+      errorDiv.html(
+        "<p>You have not submitted a correct CSV file. Check the header names and data.</p>"
+      );
     }
+    validCSVStr = JSON.stringify(validCSVArray);
+
+    $.ajax({
+      type: "POST",
+      url: "/api/assets",
+      contentType: "application/json",
+      data: validCSVStr
+    }).then(function(itemsReturned) {
+      $(".container").empty();
+      var header = $("<div>")
+        .addClass("sub-header")
+        .text("Bulk Create Assets");
+      var instructions = $("<div>")
+        .addClass("description")
+        .html(
+          "<p>You have submitted the CSV file succesfully. Here are the results</p>"
+        );
+      var btnWarehouse = $("<button>")
+        .addClass("btn-warehouse btn-orange")
+        .text("Back");
+      var table = $("<table>").addClass("bulk-results");
+      var tblHeadSN = $("<th>").text("Serial Number");
+      var tblHeadResult = $("<th>").text("Result");
+      var tblHead = $("<tr>").append(tblHeadSN, tblHeadResult);
+      table.append(tblHead);
+      itemsReturned.forEach(item => {
+        var tblRow = $("<tr>");
+        var tblDataSN = $("<td>").text(item.serialNumber);
+        if (item.wasCreated) {
+          var tblDataResult = $("<td>").text("Asset added!");
+        } else {
+          var tblDataResult = $("<td>").text("Asset already exists!");
+        }
+        tblRow.append(tblDataSN, tblDataResult);
+        table.append(tblRow);
+      });
+      $(".container").append(header, instructions, btnWarehouse, table);
+      $(".btn-warehouse").on("click", function(event) {
+        $(location).attr("href", "/warehouse/");
+      });
+    });
+  }
+};
+
+const formatDate = function(dateStr) {
+  return moment(dateStr, "MM/DD/YYYY", false).format();
 };

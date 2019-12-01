@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
   );
 
   Department.associate = function(models) {
-    Department.belongsTo(models.User, { onDelete: "SET NULL" });
+    Department.hasOne(models.User, { onDelete: "SET NULL" });
   };
   return Department;
 };
