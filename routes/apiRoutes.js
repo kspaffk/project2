@@ -15,16 +15,21 @@ module.exports = function(app) {
   });
 
   app.post("/api/assets", function(req, res) {
-    console.log(req.body);
-    whController.bulkInsert(req.body);
+    itemCount = req.body.length;
+    itemsReturned = [];
+
+    req.body.forEach(item => {
+      whController.bulkInsert(item, function(wasCreated) {
+          itemsReturned.push({ "serialNumber": item.serialNumber, "wasCreated": wasCreated });
+          if (itemsReturned.length === itemCount) {
+            console.log(JSON.stringify(itemsReturned))
+            res.json(itemsReturned);
+          }
+      });
+    });
   });
 
   app.post("/api/assets/assign", function(req, res) {
-    db.Asset.update(
-      { UserEmpID: req.body.UserEmpID },
-      { where: { id: req.body.id } }
-    ).then(function(data) {
-      res.json(data);
-    });
+    res.json(whController.assignAsset(req.body));
   });
 };
