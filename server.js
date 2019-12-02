@@ -2,33 +2,34 @@ require("dotenv").config();
 var express = require("express");
 var exphbs = require("express-handlebars");
 var passport = require("passport");
-var session = require('express-session');
+var session = require("express-session");
 var db = require("./models");
-var auth = require('./auth');
+var auth = require("./routes/auth");
 
 var app = express();
 
 var PORT = process.env.PORT || 3000;
 
 // Set up Google OAuth
-var GoogleStrategy = ('passport-google-oauth').OAuth2Strategy;
+var GoogleStrategy = ("passport-google-oauth").OAuth2Strategy;
 
 // Middleware
-passport.use(new GoogleStrategy({
-  clientID: '915481890439-v5lfe6idpujd9toa27cd35fongdgb9rg.apps.googleusercontent.com',
-  clientSecret: 'tpWX1-7SmwKTmSVMaY_PMjc6',
-  callbackURL: 'http://localhost:3000/auth/google/callback'},
-  function(req, accessToken, refreshToken, profile, done) {
-    done(null, profile);
-  }
-));
+passport.use(new GoogleStrategy
+  ({
+    clientID: "915481890439-v5lfe6idpujd9toa27cd35fongdgb9rg.apps.googleusercontent.com",
+    clientSecret: "tpWX1-7SmwKTmSVMaY_PMjc6",
+    callbackURL: "http://localhost:3000/auth/google/callback"},
+    function(req, accessToken, refreshToken, profile, done) {
+      done(null, profile);
+  })
+);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("public"));
-app.use(session({secret: 'anything'}));
+app.use(session({secret: "anything"}));
 
-// Pull in passport middleware to set up framework
+// Pull in passport middleware to set up framework that it needs
 app.use(passport.initialize());
 app.use(passport.session());
 // Passport uses to place into the session
@@ -41,7 +42,7 @@ passport.deserializeUser(function(empId, done) {
   done(null, empId);
 });
 
-app.use('auth', auth);
+app.use("/auth", auth);
 
 // Handlebars
 app.engine(
