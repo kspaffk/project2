@@ -3,14 +3,17 @@ var express = require("express");
 var exphbs = require("express-handlebars");
 var passport = require("passport");
 var session = require('express-session');
-
 var db = require("./models");
+var auth = require('./auth');
 
 var app = express();
+
+var PORT = process.env.PORT || 3000;
 
 // Set up Google OAuth
 var GoogleStrategy = ('passport-google-oauth').OAuth2Strategy;
 
+// Middleware
 passport.use(new GoogleStrategy({
   clientID: '915481890439-v5lfe6idpujd9toa27cd35fongdgb9rg.apps.googleusercontent.com',
   clientSecret: 'tpWX1-7SmwKTmSVMaY_PMjc6',
@@ -20,10 +23,6 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-
-var PORT = process.env.PORT || 3000;
-
-// Middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("public"));
@@ -41,6 +40,8 @@ passport.deserializeUser(function(empId, done) {
   user.findById(id);
   done(null, empId);
 });
+
+app.use('auth', auth);
 
 // Handlebars
 app.engine(
