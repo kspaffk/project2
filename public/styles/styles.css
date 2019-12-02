@@ -19,8 +19,6 @@ header {
 
 select {
   width: 200px;
-  margin: 10px;
-  padding: 10px;
 }
 
 table {
@@ -41,6 +39,15 @@ th {
 td, th {
   border: 1px solid #ddd;
   padding: 8px;
+}
+
+input {
+  display: block;
+  font-family: "Ubuntu Condensed", sans-serif;
+  font-size: 18px;
+  margin: 10px;
+  padding: 5px;
+  width: 300px;
 }
 
 .title {
@@ -93,6 +100,22 @@ td, th {
 .description>ul {
   list-style-type: circle;
   margin: 20px 40px;
+}
+
+.dropdown-container {
+  display: grid;
+  grid-column: auto auto;
+  width: 400px;
+}
+
+.asset-drop {
+  margin: 5px;
+  grid-column: 1 / 2;
+}
+
+.user-drop {
+  margin: 5px;
+  grid-column: 2 / 3;
 }
 
 .code {

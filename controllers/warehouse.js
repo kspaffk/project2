@@ -9,13 +9,21 @@ var bulkInsert = function(object, cb) {
   });
 };
 
-var assignAsset = function(object) {
+var assignAsset = function(object, cb) {
+  var returnedError = false;
   models.Asset.update(
     { UserEmpID: object.UserEmpID },
     { where: { id: object.id } }
-  ).then(function(data) {
-    return data;
-  });
+  )
+    .then(function(data) {
+      console.log(data);
+      cb(returnedError);
+    })
+    .catch(function(error) {
+      returnedError = true;
+      console.log(error);
+      cb(returnedError);
+    });
 };
 
 exports.bulkInsert = bulkInsert;

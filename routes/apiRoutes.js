@@ -14,6 +14,12 @@ module.exports = function(app) {
     });
   });
 
+  app.get("/api/itemtypes", function(req, res) {
+    db.ItemType.findAll({}).then(function(itemTypes) {
+      res.json(itemTypes);
+    });
+  });
+
   app.post("/api/assets", function(req, res) {
     itemCount = req.body.length;
     itemsReturned = [];
@@ -29,7 +35,9 @@ module.exports = function(app) {
     });
   });
 
-  app.post("/api/assets/assign", function(req, res) {
-    res.json(whController.assignAsset(req.body));
+  app.put("/api/asset/assign", function(req, res) {
+    whController.assignAsset(req.body, function(returnedError) {
+      res.json(returnedError);
+    });
   });
 };

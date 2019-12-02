@@ -5,6 +5,7 @@ $(document).ready(function() {
   });
   $(".create-one-asset").on("click", function(event) {
     $(".container").empty();
+    createOneAsset();
   });
   $(".edit-one-asset").on("click", function(event) {
     $(".container").empty();
@@ -23,7 +24,7 @@ $(document).ready(function() {
 
 $(".sidebar-header").text("Warehouse");
 $(".sidebar-header").on("click", function() {
-    $(location).attr("href", "/warehouse/");
+  $(location).attr("href", "/warehouse/");
 });
 
 var assignAsset = function() {
@@ -32,12 +33,19 @@ var assignAsset = function() {
       var header = $("<div>")
         .addClass("sub-header")
         .text("Assign Asset");
+      var errorDiv = $("<div>").addClass("error-txt");
       var description = $("<div>")
         .addClass("description")
         .html(
           "<p>To assign an asset to a user, choose a user and an asset below and click <span class='code'>Assign</span></p>"
         );
-
+      var dropdownContainer = $("<div>").addClass("dropdown-container");
+      var assetDrop = $("<div>")
+        .addClass("asset-drop")
+        .html("<h1>Asset</h1>");
+      var userDrop = $("<div>")
+        .addClass("user-drop")
+        .html("<h1>User</h1>");
       var selectAsset = $("<select>").attr("id", "select-asset");
       assets.forEach(asset => {
         var option = $("<option>")
@@ -54,6 +62,10 @@ var assignAsset = function() {
         selectUser.append(option);
       });
 
+      assetDrop.append(selectAsset);
+      userDrop.append(selectUser);
+      dropdownContainer.append(assetDrop, userDrop);
+
       var btnDiv = $("<div>").addClass("button-div");
       var button = $("<button>")
         .attr({
@@ -66,9 +78,9 @@ var assignAsset = function() {
       btnDiv.append(button);
       $(".container").append(
         header,
+        errorDiv,
         description,
-        selectUser,
-        selectAsset,
+        dropdownContainer,
         btnDiv
       );
       $("#select-user, #select-asset").select2();
@@ -79,17 +91,77 @@ var assignAsset = function() {
         var assignJSON = JSON.stringify({ UserEmpID: userEmpID, id: assetID });
 
         $.ajax({
-          type: "POST",
-          url: "/api/assets/assign",
+          type: "PUT",
+          url: "/api/asset/assign",
           contentType: "application/json",
           data: assignJSON
-        }).then(function(data) {
-          console.log("*************************");
-          console.log(data);
-          console.log("*************************");
+        }).then(function(returnedError) {
+          if (returnedError) {
+            errorDiv.html(
+              "<p>There was a problem assigning the asset. Please try again.</p>"
+            );
+          } else {
+            $(".dropdown-container").remove();
+            $(".button-div").remove();
+            $(".description").html(
+              "<p>The asset was assigned successfully!</p>"
+            );
+            var btnWarehouse = $("<button>")
+              .addClass("btn-warehouse btn-orange")
+              .text("Back");
+            $(".container").append(btnWarehouse);
+            $(".btn-warehouse").on("click", function(event) {
+              $(location).attr("href", "/warehouse/");
+            });
+          }
         });
       });
     });
+  });
+};
+
+var createOneAsset = function() {
+  $.get("/api/itemtypes", function(itemTypes) {
+    var formContainer = $("<div>").addClass("form-container");
+    var form = $("<form>");
+    var inputSN = $("<input>")
+      .attr({
+        type: "text",
+        id: "serial-num",
+        placeholder: "Enter Serial Number"
+      })
+      .text("Serial Number");
+    var inputDesc = $("<input>").attr({
+      type: "text",
+      id: "description",
+      placeholder: "Enter Asset Description"
+    });
+    var inputModel = $("<input>").attr({
+      type: "text",
+      id: "item-type",
+      placeholder: "Enter Asset Mode or Item Name"
+    });
+    var inputPurchDate = $("<input>").attr({
+      type: "text",
+      id: "purchase-date",
+      placeholder: "Enter Purchase Date using MM/DD/YYYY"
+    });
+    var userDrop = $("<div>")
+      .addClass("user-drop")
+      .html("<h1>Item Type</h1>");
+    var selectItemType = $("<select>").attr("id", "select-itemtype");
+    itemTypes.forEach(item => {
+      var options = $("<option>")
+        .attr("value", item.id)
+        .text(item.itemType);
+      selectItemType.append(options);
+    });
+    userDrop.append(selectItemType);
+    
+    form.append(inputSN, inputDesc, inputModel, inputPurchDate, userDrop);
+    formContainer.append(form);
+    $(".container").append(formContainer);
+    $("#select-itemtype").select2();
   });
 };
 
@@ -141,6 +213,7 @@ var createBulk = function() {
         line.purchaseDate &&
         line.itemName
       ) {
+        line.StatusId = 2;
         line.purchaseDate = formatDate(line.purchaseDate);
         validCSVArray.push(line);
       }
