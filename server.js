@@ -1,6 +1,8 @@
 require("dotenv").config();
 var express = require("express");
 var exphbs = require("express-handlebars");
+var passport = require("passport");
+var session = require('express-session');
 
 var db = require("./models");
 
@@ -11,7 +13,19 @@ var PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("public"));
+app.use(session({secret: 'anything'}));
+// Pull in passport middleware to set up framework
+app.use(passport.initialize());
+app.use(passport.session());
+// Passport uses to place into the session
+passport.serializeUser(function(empId, done) {
+  done(null, empId);
+});
 
+passport.deserializeUser(function(empId, done) {
+  user.findById(id);
+  done(null, empId);
+});
 // Handlebars
 app.engine(
   "handlebars",
