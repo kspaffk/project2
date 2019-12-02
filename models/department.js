@@ -1,3 +1,5 @@
+var connection = require("../config/connection");
+
 module.exports = function(sequelize, DataTypes) {
   var Department = sequelize.define(
     "Department",
