@@ -16,6 +16,7 @@
 
 
   <link rel="stylesheet" href="../../public/styles/styles.css" media="screen" title="no title" charset="utf-8">
+
   <link href="https://fonts.googleapis.com/css?family=Cinzel|Libre+Barcode+128+Text|Ubuntu+Condensed&display=swap|Ubuntu+Mono&display=swap"
     rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
@@ -27,21 +28,10 @@
 </head>
 
 <body>
-  <div class="grid">
-    <header>
-      <div class="title">OneTouch Inventory Management</div>
-    </header>
-    <div class="sidebar">
-      <div class="body-header sidebar-header">**USER ROLE**</div>
-      <ul>
-        <li>User page</li>
-        <li>Specific Role page</li>
-      </ul>
-    </div>
-    <div class="body-hb">
-      {{{body}}}
-    </div>
+  <div>
+    <%=user.image%>
+    <%user.name%>
   </div>
-</body>
 
+</body>
 </html>
