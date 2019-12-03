@@ -44,20 +44,14 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   User.associate = function(models) {
-    User.hasOne(models.Role, {
-      foreignKey: "id",
-      allowNull: false
-    });
+    User.belongsTo(models.Role);
     User.hasMany(models.Asset, {
-      foreignKey: "id",
-      allowNull: true
+      onDelete: "SET NULL"
     });
     User.hasMany(models.Return, {
       allowNull: true
     });
-    User.hasOne(models.Department, {
-      allowNull: false
-    });
+    User.belongsTo(models.Department);
   };
 
   return User;

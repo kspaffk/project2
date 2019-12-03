@@ -1,17 +1,23 @@
 module.exports = function(sequelize, DataTypes) {
-  var ItemType = sequelize.define("ItemType", {
-    type: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [1]
+  var ItemType = sequelize.define(
+    "ItemType",
+    {
+      itemType: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          len: [1]
+        }
       }
+    },
+    {
+      timestamps: false
     }
-  });
+  );
 
   ItemType.associate = function(models) {
-    ItemType.belongsTo(models.Asset, {
-      allowNull: true
+    ItemType.hasOne(models.Asset, {
+      onDelete: "SET NULL"
     });
   };
 
