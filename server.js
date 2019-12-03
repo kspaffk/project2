@@ -11,7 +11,7 @@ var app = express();
 var PORT = process.env.PORT || 3000;
 
 // Set up Google OAuth
-var GoogleStrategy = ("passport-google-oauth").OAuth2Strategy;
+var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
 // Middleware
 passport.use(new GoogleStrategy
