@@ -2,7 +2,7 @@ var express = require("express");
 var passport = require("passport");
 var router = express.Router();
 
-router.route("/googlecallback")
+router.route("/google/callback")
 // Tell passport to use google strategy (JSON passed in) go to users route
   .get(passport.authenticate("google", {
     successRedirect: "/users/",

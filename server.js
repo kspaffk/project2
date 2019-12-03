@@ -4,7 +4,7 @@ var exphbs = require("express-handlebars");
 var passport = require("passport");
 var session = require("express-session");
 var db = require("./models");
-// var require = require('./routes/index');
+// var routes = require('./routes/htmlRoutes');
 var users = require('./routes/users');
 var auth = require("./routes/auth");
 
@@ -47,8 +47,8 @@ passport.deserializeUser(function(user, done) {
 });
 
 // app.use("/", routes);
-app.use("/users", users)
-app.use("./routes/auth", auth);
+app.use("/users", users);
+app.use("/auth", auth);
 
 // Handlebars
 app.engine(
