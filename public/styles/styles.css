@@ -91,13 +91,13 @@ input {
   padding: 10px;
 }
 
-.description {
+.instructions {
   font-size: 18px;
   line-height: 1.4em;
   margin: 20px;
 }
 
-.description>ul {
+.instructions>ul {
   list-style-type: circle;
   margin: 20px 40px;
 }

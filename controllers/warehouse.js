@@ -1,10 +1,13 @@
 var models = require("../models");
 
-var bulkInsert = function(object, cb) {
+var insert = function(object, cb) {
   models.Asset.findOrCreate({ where: object }).spread(function(
     asset,
     wasCreated
   ) {
+    cb(wasCreated);
+  }).catch(function(error) {
+    wasCreated = false;
     cb(wasCreated);
   });
 };
@@ -26,5 +29,5 @@ var assignAsset = function(object, cb) {
     });
 };
 
-exports.bulkInsert = bulkInsert;
+exports.insert = insert;
 exports.assignAsset = assignAsset;
