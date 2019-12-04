@@ -1,14 +1,14 @@
 {
   "development": {
     "username": "root",
-    "password": "password1",
+    "password": "null",
     "database": "inv_mgmt",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": null,
+    "password": "null",
     "database": "testdb",
     "host": "localhost",
     "dialect": "mysql",
