@@ -14,12 +14,19 @@ module.exports = function(app) {
     });
   });
 
+  app.get("/api/itemtypes", function(req, res) {
+    db.ItemType.findAll({}).then(function(itemTypes) {
+      res.json(itemTypes);
+    });
+  });
+
   app.post("/api/assets", function(req, res) {
+    console.log(req.body);
     itemCount = req.body.length;
     itemsReturned = [];
 
     req.body.forEach(item => {
-      whController.bulkInsert(item, function(wasCreated) {
+      whController.insert(item, function(wasCreated) {
           itemsReturned.push({ "serialNumber": item.serialNumber, "wasCreated": wasCreated });
           if (itemsReturned.length === itemCount) {
             console.log(JSON.stringify(itemsReturned))
@@ -29,7 +36,9 @@ module.exports = function(app) {
     });
   });
 
-  app.post("/api/assets/assign", function(req, res) {
-    res.json(whController.assignAsset(req.body));
+  app.put("/api/asset/assign", function(req, res) {
+    whController.assignAsset(req.body, function(returnedError) {
+      res.json(returnedError);
+    });
   });
 };

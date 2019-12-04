@@ -2,6 +2,7 @@ module.exports = function(sequelize, DataTypes) {
   var Asset = sequelize.define("Asset", {
     serialNumber: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
       validate: {
         len: [1, 20]
