@@ -17,21 +17,25 @@ var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
 // Middleware
 // Strategy JSON tokens letting google know how we are as an app to authenticate user
-passport.use(new GoogleStrategy
-  ({
-    clientID: "915481890439-v5lfe6idpujd9toa27cd35fongdgb9rg.apps.googleusercontent.com",
-    clientSecret: "tpWX1-7SmwKTmSVMaY_PMjc6",
-    callbackURL: "http://localhost:3000/auth/google/callback"},
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID:
+        "915481890439-v5lfe6idpujd9toa27cd35fongdgb9rg.apps.googleusercontent.com",
+      clientSecret: "tpWX1-7SmwKTmSVMaY_PMjc6",
+      callbackURL: "http://localhost:3000/auth/google/callback"
+    },
     // Called when google returns profile data back to the callback URL
     function(req, accessToken, refreshToken, profile, done) {
       done(null, profile);
-  })
+    }
+  )
 );
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("public"));
-app.use(session({secret: "anything"}));
+app.use(session({ secret: "anything" }));
 
 // Pull in passport middleware to set up framework that it needs
 app.use(passport.initialize());
