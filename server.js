@@ -5,7 +5,7 @@ var passport = require("passport");
 var session = require("express-session");
 var db = require("./models");
 // var routes = require('./routes/htmlRoutes');
-var users = require('./routes/users');
+var users = require("./routes/users");
 var auth = require("./routes/auth");
 
 var app = express();
