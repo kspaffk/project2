@@ -14,8 +14,17 @@ module.exports = function() {
       },
       // Called when google returns profile data back to the callback URL
       function(req, accessToken, refreshToken, profile, done) {
-        done(null, profile);
+        var user = {};
+
+        user.email = profile.emails[0].value;
+        user.image = profile._json.image.url;
+        user.displayName = profile.displayName;
+
+        user.google = {};
+        user.google.id = profile.id;
+        user.google.token = accessToken;
+
+        done(null, user);
       }
-    )
-  );
+  ));
 };

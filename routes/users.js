@@ -11,11 +11,8 @@ router.use("/", function(req, res, next) {
 // GET users listing and pass back to users.handlebars
 router.get("/", function(req, res) {
   res.render("../views/users.handlebars", 
-    {user: {name: req.user.displayName
-            // image: req.user._json.image.url
-           }
-    }
-  );
+    {user: { name: req.user.displayName,
+             image: req.user.image }});
 });
 
 module.exports = router;
