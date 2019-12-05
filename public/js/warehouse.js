@@ -13,6 +13,7 @@ $(document).ready(function() {
     });
     $(".return-one-asset").on("click", function(event) {
         $(".container").empty();
+        returnOneAsset();
     });
     $(".create-bulk-asset").on("click", function(event) {
         $(".container").empty();
@@ -50,7 +51,7 @@ var assignAsset = function() {
             id: "btn-assign"
         })
         .addClass("btn-green")
-        .text("Assign");
+        .text("Assign Asset");
     btnDiv.append(button);
     $(".container").append(
         header,
@@ -157,14 +158,11 @@ var createOneAsset = function() {
 
 var updateOneAsset = function() {
     var header = $("<div>")
-        .addClass("sub-header")
-        .text("Update an Asset");
+    .addClass("sub-header")
+    .text("Update an Asset");
     var errorDiv = $("<div>").addClass("error-txt");
     var instructions = $("<div>")
-        .addClass("instructions")
-        .html(
-            "<p>Choose an asset to update and then fill in the fields that need to be udpated.</p>"
-        );
+        .addClass("instructions");
     var assetDrop = createAssetDropdown();
 
     var btnSelectAsset = $("<button>")
@@ -176,6 +174,9 @@ var updateOneAsset = function() {
         instructions,
         assetDrop,
         btnSelectAsset
+    );
+    $(".instructions").html(
+        "<p>Choose an asset to update and then fill in the fields that need to be udpated.</p>"
     );
     $("#select-asset").select2();
 
@@ -209,7 +210,7 @@ var updateOneAsset = function() {
             $(".container").append(btnUpdate);
             $(".btn-update").on("click", function(event) {
                 var updateAssetArray = [];
-                updateAssetArray.push({ assetID: assetVal });
+                updateAssetArray.push(assetVal);
                 var updateAssetObj = {};
                 updateAssetObj.serialNumber = $("#serial-num").val();
                 updateAssetObj.description = $("#description").val();
@@ -222,7 +223,7 @@ var updateOneAsset = function() {
                 ).val();
                 updateAssetArray.push(updateAssetObj);
                 var assetStr = JSON.stringify(updateAssetArray);
-                    console.log(assetStr)
+                console.log(assetStr);
                 $.ajax({
                     type: "PUT",
                     url: "/api/assets",
@@ -242,6 +243,70 @@ var updateOneAsset = function() {
                     }
                 });
             });
+        });
+    });
+};
+
+var returnOneAsset = function() {
+    var header = $("<div>")
+        .addClass("sub-header")
+        .text("Return Asset");
+    var errorDiv = $("<div>").addClass("error-txt");
+    var instructions = $("<div>")
+        .addClass("instructions")
+        .html(
+            "<p>To return an asset to the Warehouse, choose your name in the user and the asset in the dropdowns below and click <span class='code'>Return</span></p>"
+        );
+    var dropdownContainer = $("<div>").addClass("dropdown-container");
+    assetDrop = createAssetDropdown();
+    userDrop = createUserDropdown();
+    dropdownContainer.append(assetDrop, userDrop);
+
+    var btnDiv = $("<div>").addClass("button-div");
+    var button = $("<button>")
+        .attr({
+            type: "button",
+            id: "btn-return"
+        })
+        .addClass("btn-green")
+        .text("Return Asset");
+    btnDiv.append(button);
+    $(".container").append(
+        header,
+        errorDiv,
+        instructions,
+        dropdownContainer,
+        btnDiv
+    );
+    $("#select-user, #select-asset").select2();
+
+    $("#btn-return").on("click", function(event) {
+        var assetID = $("#select-asset").val();
+        var userEmpID = $("#select-user").val();
+        var returnStr = JSON.stringify({
+            UserEmpID: userEmpID,
+            AssetId: assetID
+        });
+        console.log(returnStr)
+
+        $.ajax({
+            type: "PUT",
+            url: "/api/return",
+            contentType: "application/json",
+            data: returnStr
+        }).then(function(returnedError) {
+            if (returnedError) {
+                errorDiv.html(
+                    "<p>There was a problem returning the asset. Please try again.</p>"
+                );
+            } else {
+                $(".dropdown-container").remove();
+                $(".button-div").remove();
+                $(".instructions").html(
+                    "<p>The asset was returned successfully!</p>"
+                );
+                createBackBtn();
+            }
         });
     });
 };
@@ -459,6 +524,9 @@ const createAssetDropdown = function() {
     assetDrop.append(selectAsset);
     assetDropdown = assetDrop;
     return assetDropdown;
+};
+
+const createPageForUpdateOne = function() {
 };
 
 const createBackBtn = function() {

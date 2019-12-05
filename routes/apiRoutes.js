@@ -49,13 +49,18 @@ module.exports = function(app) {
 
   app.put("/api/assets", function(req, res) {
     whController.updateAsset(req.body[0], req.body[1], function(returnedError) {
-      console.log("ASSET PUT!")
       res.json(returnedError);
     });
   });
 
   app.put("/api/asset/assign", function(req, res) {
     whController.assignAsset(req.body, function(returnedError) {
+      res.json(returnedError);
+    });
+  });
+
+  app.put("/api/return", function(req, res) {
+    whController.returnAsset(req.body, function(returnedError) {
       res.json(returnedError);
     });
   });

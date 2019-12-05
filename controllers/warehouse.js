@@ -17,7 +17,7 @@ var assignAsset = function(object, cb) {
   var date = moment();
   var returnedError = false;
   models.Asset.update(
-    { UserEmpID: object.UserEmpID,  assignDate: date },
+    { UserEmpID: object.UserEmpID,  assignDate: date, StatusId: 1 },
     { where: { id: object.id } }
   )
     .then(function(data) {
@@ -31,13 +31,12 @@ var assignAsset = function(object, cb) {
     });
 };
 
-var updateAsset = function(oldAssetID, newData, cb) {
+var updateAsset = function(assetID, newData, cb) {
   var date = moment();
   newData.updatedAt = date;
-  console.log(`Old Asset ID: ${JSON.stringify(oldAssetID)}\nNew Data ${JSON.stringify(newData)}`)
   var returnedError = false;
   models.Asset.update(
-    newData, { where: { id: oldAssetID.assetID }}
+    newData, { where: { id: assetID }}
   ).then(function(data) {
     cb(returnedError);
   }).catch(function(error) {
@@ -47,6 +46,31 @@ var updateAsset = function(oldAssetID, newData, cb) {
   })
 };
 
+var returnAsset = function(object, cb) {
+  var date = moment();
+  var returnedError = false;
+  models.Return.create(
+    { UserEmpID: object.UserEmpID,  returnDate: date, createdAt: date, AssetId: object.AssetId }
+  )
+    .then(function(data) {
+      console.log(data);
+      models.Asset.update({ StatusId: 2, UserEmpID: null, assignDate: null }, { where: { id: object.AssetId }
+      }).then(function(data) {
+        cb(returnedError);
+      }).catch(function(error) {
+        returnedError = true;
+        console.log(error);
+        cb(returnedError);
+      });
+    })
+    .catch(function(error) {
+      returnedError = true;
+      console.log(error);
+      cb(returnedError);
+    });
+};
+
 exports.insert = insert;
 exports.assignAsset = assignAsset;
 exports.updateAsset = updateAsset;
+exports.returnAsset = returnAsset;
