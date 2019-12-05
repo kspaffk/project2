@@ -5,7 +5,8 @@ var router = express.Router();
 router.get("/", function(req, res) {
   res.render("../views/users.handlebars", 
     {user: {name: req.user.displayName,
-     image: req.user._json.image.url}});
+    //  image: req.user._json.image.url
+    }});
 });
 
 module.exports = router;
