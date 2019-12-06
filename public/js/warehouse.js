@@ -72,13 +72,13 @@ var assignAsset = function() {
 
     $("#btn-assign").on("click", function(event) {
         var assetID = $("#select-asset option:selected").val();
-        console.log(`assetID: ${assetID}`)
+        console.log(`assetID: ${assetID}`);
         var userEmpID = $("#select-user").val();
         var assignJSON = JSON.stringify({
             UserEmpID: userEmpID,
             id: assetID
         });
-        console.log(assignJSON)
+        console.log(assignJSON);
 
         $.ajax({
             type: "PUT",
@@ -472,10 +472,7 @@ var returnBulk = function() {
         var validCSVArray = [];
 
         csvParsed.forEach(line => {
-            if (
-                line.serialNumber != "" &&
-                line.serialNumber
-            ) {
+            if (line.serialNumber != "" && line.serialNumber) {
                 validCSVArray.push(line);
             }
         });
@@ -485,7 +482,7 @@ var returnBulk = function() {
             );
         }
         validCSVStr = JSON.stringify(validCSVArray);
-        console.log(validCSVStr)
+        console.log(validCSVStr);
 
         $.ajax({
             type: "POST",
@@ -518,6 +515,64 @@ var returnBulk = function() {
             createBackBtn();
             $(".container").append(table);
         });
+    });
+};
+
+var retireBulk = function() {
+    var header = $("<div>")
+        .addClass("sub-header")
+        .text("Bulk Retire Assets");
+    var errorDiv = $("<div>").addClass("error-txt");
+    var instructions = $("<div>")
+        .addClass("instructions")
+        .html(
+            "<p>The CSV file must have one column of data with a header named <span class='code'>serialNum</span> and the column must be serial numbers!</p>"
+        );
+    var dropCSV = $("<div>")
+        .attr("id", "dropcsv")
+        .text("Drop your CSV file here OR click to choose a file!");
+
+    $(".container").append(header, errorDiv, instructions, dropCSV);
+
+    readCSVFile(function(csvParsed) {
+        var header = $("<div>")
+        .addClass("sub-header")
+        .text("Bulk Retire Assets");
+    var instructions = $("<div>")
+        .addClass("instructions")
+        .html(
+            "<p>You have submitted the CSV file succesfully. Here are the results</p>"
+        );
+        var table = $("<table>").addClass("bulk-results");
+        var tblHeadSN = $("<th>").text("Serial Number");
+        var tblHeadResult = $("<th>").text("Result");
+        var tblHead = $("<tr>").append(tblHeadSN, tblHeadResult);
+        table.append(tblHead);
+
+        csvParsed.forEach(line => {
+            if (line.serialNumber != "" && line.serialNumber) {
+                $.get("api/assets/" + line.serialNumber, function(asset) {
+                    lineStr = JSON.stringify(line);
+                    $.ajax({
+                        type: "PUT",
+                        url: "/api/asset" + asset.id,
+                        contentType: "application/json",
+                        data: lineStr
+                    }).then(function(retiredAsset) {
+                        $(".container").empty();
+                        var tblRow = $("<tr>");
+                        var tblDataSN = $("<td>").text(retiredAsset.serialNumber);
+                        var tblDataResult = $("<td>").text("Asset retired!");
+                        tblRow.append(tblDataSN, tblDataResult);
+                        table.append(tblRow);
+                    });
+                });
+            }
+        });
+
+        $(".container").append(header, instructions);
+        createBackBtn();
+        $(".container").append(table);
     });
 };
 

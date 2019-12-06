@@ -21,6 +21,12 @@ module.exports = function(app) {
     });
   });
 
+  app.get("/api/asset/:serialNumber", function(req, res) {
+    db.Asset.findOne({ where: { serialNumber: req.params.serialNumber }}).then(function(asset) {
+      res.json(asset);
+    });
+  });
+
   app.get("/api/users", function(req, res) {
     db.User.findAll({}).then(function(users) {
       res.json(users);
@@ -71,14 +77,13 @@ module.exports = function(app) {
 
   
   app.put("/api/assign-asset", function(req, res) {
-    console.log(`REQ BODY assetID: ${req.body.assetID}`)
     whController.assignAsset(req.body, function(returnedError) {
       res.json(returnedError);
     });
   });
   
   app.put("/api/asset/:id", function(req, res) {
-    // params: [0] = just the assetID (INT) and [1] = object of items to be updated in database
+    // params: [0] = the assetID (INT) and [1] = object of items to be updated in database
     whController.updateAsset(req.params.id, req.body, function(returnedError) {
       res.json(returnedError);
     });
