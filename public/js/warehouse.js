@@ -15,11 +15,19 @@ $(document).ready(function() {
         $(".container").empty();
         returnOneAsset();
     });
+    $(".retire-one-asset").on("click", function(event) {
+        $(".container").empty();
+        retireOneAsset();
+    });
     $(".create-bulk-asset").on("click", function(event) {
         $(".container").empty();
         createBulk();
     });
     $(".return-bulk-asset").on("click", function(event) {
+        $(".container").empty();
+        returnBulk();
+    });
+    $(".retire-bulk-asset").on("click", function(event) {
         $(".container").empty();
     });
 });
@@ -63,16 +71,18 @@ var assignAsset = function() {
     $("#select-user, #select-asset").select2();
 
     $("#btn-assign").on("click", function(event) {
-        var assetID = $("#select-asset").val();
+        var assetID = $("#select-asset option:selected").val();
+        console.log(`assetID: ${assetID}`)
         var userEmpID = $("#select-user").val();
         var assignJSON = JSON.stringify({
             UserEmpID: userEmpID,
             id: assetID
         });
+        console.log(assignJSON)
 
         $.ajax({
             type: "PUT",
-            url: "/api/asset/assign",
+            url: "/api/assign-asset",
             contentType: "application/json",
             data: assignJSON
         }).then(function(returnedError) {
@@ -208,8 +218,6 @@ var updateOneAsset = function() {
                 .text("Update Asset");
             $(".container").append(btnUpdate);
             $(".btn-update").on("click", function(event) {
-                var updateAssetArray = [];
-                updateAssetArray.push(assetVal);
                 var updateAssetObj = {};
                 updateAssetObj.serialNumber = $("#serial-num").val();
                 updateAssetObj.description = $("#description").val();
@@ -220,12 +228,10 @@ var updateOneAsset = function() {
                 updateAssetObj.ItemTypeId = $(
                     "#select-itemtype option:selected"
                 ).val();
-                updateAssetArray.push(updateAssetObj);
-                var assetStr = JSON.stringify(updateAssetArray);
-                console.log(assetStr);
+                var assetStr = JSON.stringify(updateAssetObj);
                 $.ajax({
                     type: "PUT",
-                    url: "/api/assets",
+                    url: "/api/asset/" + assetVal,
                     contentType: "application/json",
                     data: assetStr
                 }).then(function(returnedError) {
@@ -254,7 +260,7 @@ var returnOneAsset = function() {
     var instructions = $("<div>")
         .addClass("instructions")
         .html(
-            "<p>To return an asset to the Warehouse, choose your name in the user and the asset in the dropdowns below and click <span class='code'>Return</span></p>"
+            "<p>To return an asset to the Warehouse, choose the asset and your name in the dropdowns below and click <span class='code'>Return</span></p>"
         );
     var dropdownContainer = $("<div>").addClass("dropdown-container");
     assetDrop = createAssetDropdown();
@@ -303,6 +309,65 @@ var returnOneAsset = function() {
                 $(".button-div").remove();
                 $(".instructions").html(
                     "<p>The asset was returned successfully!</p>"
+                );
+                createBackBtn();
+            }
+        });
+    });
+};
+
+var retireOneAsset = function() {
+    var header = $("<div>")
+        .addClass("sub-header")
+        .text("Retire Asset");
+    var errorDiv = $("<div>").addClass("error-txt");
+    var instructions = $("<div>")
+        .addClass("instructions")
+        .html(
+            "<p>To retire an asset, choose the asset in the dropdown below and click <span class='code'>Return</span></p>"
+        );
+    var dropdownContainer = $("<div>").addClass("dropdown-container");
+    assetDrop = createAssetDropdown();
+    dropdownContainer.append(assetDrop);
+
+    var btnDiv = $("<div>").addClass("button-div");
+    var button = $("<button>")
+        .attr({
+            type: "button",
+            id: "btn-retire"
+        })
+        .addClass("btn-green")
+        .text("Retire Asset");
+    btnDiv.append(button);
+    $(".container").append(
+        header,
+        errorDiv,
+        instructions,
+        dropdownContainer,
+        btnDiv
+    );
+    $("#select-asset").select2();
+
+    $("#btn-retire").on("click", function(event) {
+        var assetID = $("#select-asset").val();
+        var date = moment();
+        var data = { retiredDate: date, StatusId: "3" };
+        var dataStr = JSON.stringify(data);
+        $.ajax({
+            type: "PUT",
+            url: "/api/asset/" + assetID,
+            contentType: "application/json",
+            data: dataStr
+        }).then(function(returnedError) {
+            if (returnedError) {
+                errorDiv.html(
+                    "<p>There was a problem retiring the asset. Please try again.</p>"
+                );
+            } else {
+                $(".dropdown-container").remove();
+                $(".button-div").remove();
+                $(".instructions").html(
+                    "<p>The asset was retired successfully!</p>"
                 );
                 createBackBtn();
             }
@@ -377,6 +442,75 @@ var createBulk = function() {
                 } else {
                     var tblDataResult = $("<td>").text("Asset already exists!");
                 }
+                tblRow.append(tblDataSN, tblDataResult);
+                table.append(tblRow);
+            });
+            $(".container").append(header, instructions);
+            createBackBtn();
+            $(".container").append(table);
+        });
+    });
+};
+
+var returnBulk = function() {
+    var header = $("<div>")
+        .addClass("sub-header")
+        .text("Bulk Return Assets");
+    var errorDiv = $("<div>").addClass("error-txt");
+    var instructions = $("<div>")
+        .addClass("instructions")
+        .html(
+            "<p>The CSV file must have one column of data with a header named <span class='code'>serialNum</span> and the column must be serial numbers!</p>"
+        );
+    var dropCSV = $("<div>")
+        .attr("id", "dropcsv")
+        .text("Drop your CSV file here OR click to choose a file!");
+
+    $(".container").append(header, errorDiv, instructions, dropCSV);
+
+    readCSVFile(function(csvParsed) {
+        var validCSVArray = [];
+
+        csvParsed.forEach(line => {
+            if (
+                line.serialNumber != "" &&
+                line.serialNumber
+            ) {
+                validCSVArray.push(line);
+            }
+        });
+        if (validCSVArray.length < 2) {
+            errorDiv.html(
+                "<p>You have not submitted a correct CSV file. Check the header names and data.</p>"
+            );
+        }
+        validCSVStr = JSON.stringify(validCSVArray);
+        console.log(validCSVStr)
+
+        $.ajax({
+            type: "POST",
+            url: "/api/returns",
+            contentType: "application/json",
+            data: validCSVStr
+        }).then(function(itemsReturned) {
+            $(".container").empty();
+            var header = $("<div>")
+                .addClass("sub-header")
+                .text("Bulk Create Assets");
+            var instructions = $("<div>")
+                .addClass("instructions")
+                .html(
+                    "<p>You have submitted the CSV file succesfully. Here are the results</p>"
+                );
+            var table = $("<table>").addClass("bulk-results");
+            var tblHeadSN = $("<th>").text("Serial Number");
+            var tblHeadResult = $("<th>").text("Result");
+            var tblHead = $("<tr>").append(tblHeadSN, tblHeadResult);
+            table.append(tblHead);
+            itemsReturned.forEach(item => {
+                var tblRow = $("<tr>");
+                var tblDataSN = $("<td>").text(item.serialNumber);
+                var tblDataResult = $("<td>").text("Asset returned!");
                 tblRow.append(tblDataSN, tblDataResult);
                 table.append(tblRow);
             });
@@ -491,7 +625,7 @@ const createAssetDropdown = function() {
         .addClass("asset-drop")
         .html("<h3>Asset</h3>");
     var selectAsset = $("<select>").attr("id", "select-asset");
-    $.get("/api/assets/", function(assets) {
+    $.get("/api/assets/active", function(assets) {
         assets.forEach(asset => {
             var option = $("<option>")
                 .attr("value", asset.id)
@@ -503,8 +637,6 @@ const createAssetDropdown = function() {
     assetDropdown = assetDrop;
     return assetDropdown;
 };
-
-const createPageForUpdateOne = function() {};
 
 const createBackBtn = function() {
     var btnWarehouse = $("<button>")
