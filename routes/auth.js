@@ -2,6 +2,7 @@ var express = require("express");
 var passport = require("passport");
 var router = express.Router();
 
+// Google Route used to sign in with google to begin with (google icon)
 router.route("/google/callback")
 // Tell passport to use google strategy (JSON passed in) go to users route
   .get(passport.authenticate("google", {
@@ -9,7 +10,6 @@ router.route("/google/callback")
     failure: "/error/"
   }));
 
-  // Route used to sign in with google to begin with (sign in with google icon)
   /* URL call with <a> tag in index.handlebars
   scope is specific to google strategy. It turns on the APIs telling it what this app
   actually wants. Also checks if enabled */
@@ -18,5 +18,16 @@ router.route("/google")
     scope: ["https://www.googleapis.com/auth/userinfo.profile",
   "https://www.googleapis.com/auth/userinfo.email"]
 }));
+
+// Twitter Route used to sign in with twitter (twitter icon)
+router.route("/twitter/callback")
+// Tell passport to use twitter strategy (JSON passed in) go to users route
+  .get(passport.authenticate("twitter", {
+    successRedirect: "/users/",
+    failure: "/error/"
+  }));
+
+router.route("/twitter")
+  .get(passport.authenticate("twitter"));
 
 module.exports = router;

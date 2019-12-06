@@ -151,3 +151,24 @@ input {
   background-color: #009600;
   color: white;
 }
+
+.social a {
+  text-align: center;
+  font-size: 28px;
+  border-radius: 50%;
+  width: 43px;
+  height: 43px;
+  display: inline-block;
+  padding-top: 4px;
+  background-clip: padding;
+}
+
+.googleplus {
+  background: #dd4b39;
+  color: #ffffff;
+}
+
+.twitter {
+  background: #55acee;
+  color: #ffffff;
+}
