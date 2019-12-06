@@ -21,7 +21,6 @@ var assignAsset = function(object, cb) {
         { where: { id: object.id } }
     )
         .then(function(data) {
-            console.log(data);
             cb(returnedError);
         })
         .catch(function(error) {
@@ -49,36 +48,31 @@ var updateAsset = function(assetID, newData, cb) {
 var returnAsset = function(object, cb) {
     var date = moment();
     var returnedError = false;
-    models.Asset.findOne({ where: { serialNumber: object.serialNumber } }).then(
-        function(asset) {
-            models.Return.create({
-                UserEmpID: object.UserEmpID,
-                returnDate: date,
-                createdAt: date,
-                AssetId: asset.id
-            })
+    models.Return.create({
+        UserEmpID: object.UserEmpID,
+        returnDate: date,
+        createdAt: date,
+        AssetId: object.id
+    })
+        .then(function(data) {
+            models.Asset.update(
+                { StatusId: 2, UserEmpID: null, assignDate: null },
+                { where: { id: object.id } }
+            )
                 .then(function(data) {
-                    console.log(data);
-                    models.Asset.update(
-                        { StatusId: 2, UserEmpID: null, assignDate: null },
-                        { where: { id: asset.id } }
-                    )
-                        .then(function(data) {
-                            cb(returnedError);
-                        })
-                        .catch(function(error) {
-                            returnedError = true;
-                            console.log(error);
-                            cb(returnedError);
-                        });
+                    cb(returnedError);
                 })
                 .catch(function(error) {
                     returnedError = true;
                     console.log(error);
                     cb(returnedError);
                 });
-        }
-    );
+        })
+        .catch(function(error) {
+            returnedError = true;
+            console.log(error);
+            cb(returnedError);
+        });
 };
 
 exports.insertAsset = insertAsset;
