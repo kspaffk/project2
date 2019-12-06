@@ -8,6 +8,12 @@ module.exports = function(app) {
     });
   });
 
+  app.get("/api/asset/:assetid", function(req, res) {
+    db.Asset.findOne({ where: { id: req.params.assetid }}).then(function(asset) {
+      res.json(asset);
+    });
+  });
+
   app.get("/api/users", function(req, res) {
     db.User.findAll({}).then(function(users) {
       res.json(users);
@@ -20,8 +26,13 @@ module.exports = function(app) {
     });
   });
 
+  app.get("/api/itemtype/:id", function(req, res) {
+    db.ItemType.findOne({ where: { id: req.params.id }}).then(function(itemType) {
+      res.json(itemType);
+    });
+  });
+
   app.post("/api/assets", function(req, res) {
-    console.log(req.body);
     itemCount = req.body.length;
     itemsReturned = [];
 
@@ -36,8 +47,20 @@ module.exports = function(app) {
     });
   });
 
+  app.put("/api/assets", function(req, res) {
+    whController.updateAsset(req.body[0], req.body[1], function(returnedError) {
+      res.json(returnedError);
+    });
+  });
+
   app.put("/api/asset/assign", function(req, res) {
     whController.assignAsset(req.body, function(returnedError) {
+      res.json(returnedError);
+    });
+  });
+
+  app.put("/api/return", function(req, res) {
+    whController.returnAsset(req.body, function(returnedError) {
       res.json(returnedError);
     });
   });
