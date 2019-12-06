@@ -1,6 +1,7 @@
 var models = require("../models");
 var moment = require("moment");
 
+<<<<<<< HEAD
 var insertAsset = function(object, cb) {
     object.StatusId = 2;
     models.Asset.findOrCreate({ where: object })
@@ -11,6 +12,17 @@ var insertAsset = function(object, cb) {
             wasCreated = false;
             cb(wasCreated);
         });
+=======
+var insert = function(object, cb) {
+  models.Asset.findOrCreate({ where: object })
+    .spread(function(asset, wasCreated) {
+      cb(wasCreated);
+    })
+    .catch(function(error) {
+      wasCreated = false;
+      cb(wasCreated);
+    });
+>>>>>>> c639dd970a34870bab1a2429b3b71afd22b262d3
 };
 
 var assignAsset = function(object, cb) {
