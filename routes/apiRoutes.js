@@ -1,9 +1,16 @@
 var db = require("../models");
 var whController = require("../controllers/warehouse.js");
+const Op = db.Sequelize.Op;
 
 module.exports = function(app) {
   app.get("/api/assets", function(req, res) {
     db.Asset.findAll({}).then(function(assets) {
+      res.json(assets);
+    });
+  });
+  
+  app.get("/api/assets/active", function(req, res) {
+    db.Asset.findAll({ where: { StatusId: { [Op.ne]: [3, 4] }}}).then(function(assets) {
       res.json(assets);
     });
   });
@@ -37,7 +44,7 @@ module.exports = function(app) {
     itemsReturned = [];
 
     req.body.forEach(item => {
-      whController.insert(item, function(wasCreated) {
+      whController.insertAsset(item, function(wasCreated) {
           itemsReturned.push({ "serialNumber": item.serialNumber, "wasCreated": wasCreated });
           if (itemsReturned.length === itemCount) {
             console.log(JSON.stringify(itemsReturned))
@@ -47,14 +54,32 @@ module.exports = function(app) {
     });
   });
 
-  app.put("/api/assets", function(req, res) {
-    whController.updateAsset(req.body[0], req.body[1], function(returnedError) {
-      res.json(returnedError);
+  app.post("/api/returns", function(req, res) {
+    itemCount = req.body.length;
+    itemsReturned = [];
+
+    req.body.forEach(item => {
+      item.UserEmpID = null;
+      whController.returnAsset(item, function(wasCreated) {
+          itemsReturned.push({ "serialNumber": item.serialNumber, "wasCreated": wasCreated });
+          if (itemsReturned.length === itemCount) {
+            res.json(itemsReturned);
+          }
+      });
     });
   });
 
-  app.put("/api/asset/assign", function(req, res) {
+  
+  app.put("/api/assign-asset", function(req, res) {
+    console.log(`REQ BODY assetID: ${req.body.assetID}`)
     whController.assignAsset(req.body, function(returnedError) {
+      res.json(returnedError);
+    });
+  });
+  
+  app.put("/api/asset/:id", function(req, res) {
+    // params: [0] = just the assetID (INT) and [1] = object of items to be updated in database
+    whController.updateAsset(req.params.id, req.body, function(returnedError) {
       res.json(returnedError);
     });
   });
