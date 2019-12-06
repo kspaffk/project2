@@ -25,6 +25,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     });
   };
-
+console.log("Chris was here");
   return Asset;
 };
