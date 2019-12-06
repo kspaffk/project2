@@ -17,13 +17,13 @@ module.exports = function() {
         var user = {};
 
         user.email = profile.emails[0].value;
-        user.image = profile._json.image.url;
+        user.image = profile.photos[0].value;
         user.displayName = profile.displayName;
 
         user.google = {};
         user.google.id = profile.id;
         user.google.token = accessToken;
-
+console.log(profile);
         done(null, user);
       }
   ));
