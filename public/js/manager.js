@@ -16,18 +16,20 @@ $(document).ready(function() {
 
 $(".sidebar-header").text("Manager");
 $(".sidebar-header").on("click", function() {
-  $(location).attr("href", "/manager/");
+    $(location).attr("href", "/manager/");
 });
 
 var returns = function() {
   $.get("api/returns/", function(returns) {
-      var header = $("<div>")
+    var header = $("<div>")
       .addClass("sub-header")
       .text("Returns");
-      var errorDiv = $("<div>").addClass("error-txt");
-      var instructions = $("<div>")
+    var errorDiv = $("<div>").addClass("error-txt");
+    var instructions = $("<div>")
       .addClass("instructions")
-      .html("<p></p>")
+      .html(
+        "<p>Return dates and who they were assigned to.<span class='code'>Assign</span></p>"
+      );
   });
 };
 

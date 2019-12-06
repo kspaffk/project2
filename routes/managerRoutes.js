@@ -1,139 +1,139 @@
 var db = require("../models");
 
 module.exports = function(app) {
-  app.get("/api/manager/type", function(req, res) {
-    db.Placeholder.findAndCountAll({
+  app.get("/api/itemtype", function(req, res) {
+    db.ItemType.findAndCountAll({
       order: [["type", "ACS"]],
       where: {
         type: req.param.type
       }
-    }).then(function(dbPlaceholder) {
-      console.log(dbPlaceholder.count);
-      console.log(dbPlaceholder.rows);
-      res.json(dbPlaceholder.rows);
+    }).then(function(ItemType) {
+      console.log(ItemType.count);
+      console.log(ItemType.rows);
+      res.json(ItemType.rows);
     });
   });
 
-  app.put("/api/manager/type", function(req, res) {
-    db.Placeholder.update(req.body, {
+  app.put("/api/itemtype", function(req, res) {
+    db.ItemType.update(req.body, {
       where: {
         type: req.param.type
       }
-    }).then(function(dbPlaceholder) {
-      console.log(dbPlaceholder.rows);
-      res.json(dbPlaceholder.rows);
+    }).then(function(ItemType) {
+      console.log(ItemType.rows);
+      res.json(ItemType.rows);
     });
   });
 
-  app.delete("/api/manager/type/:id", function(req, res) {
-    db.Placeholder.destroy({
+  app.delete("/api/itemtype/:id", function(req, res) {
+    db.ItemType.destroy({
       where: {
         id: req.param.id
       }
-    }).then(function(dbPlaceholder) {
-      console.log(dbPlaceholder.rows);
-      res.json(dbPlaceholder.rows);
+    }).then(function(ItemType) {
+      console.log(ItemType.rows);
+      res.json(ItemType.rows);
     });
   });
 
-  app.get("/api/manager/assigned", function(req, res) {
-    db.Placeholder.findAll({
+  app.get("/api/assigned", function(req, res) {
+    db.Assigned.findAll({
       order: [["assignedMonth", "ACS"]],
       where: {
         assignedMonth: req.param.assignedMonth
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Assigned) {
+      res.json(Assigned);
     });
   });
 
-  app.put("/api/manager/assigned", function(req, res) {
-    db.Placeholder.update({
+  app.put("/api/assigned", function(req, res) {
+    db.Assigned.update({
       where: {
         assignedMonth: req.param.assignedMonth
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Assigned) {
+      res.json(Assigned);
     });
   });
 
-  app.delete("/api/manager/assigned/:id", function(req, res) {
-    db.Placeholder.destroy({
+  app.delete("/api/assigned/:id", function(req, res) {
+    db.Assigned.destroy({
       where: {
         id: req.param.id
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Assigned) {
+      res.json(Assigned);
     });
   });
 
-  app.get("/api/manager/retired", function(req, res) {
-    db.Placeholder.findAll({
+  app.get("/api/retired", function(req, res) {
+    db.Retired.findAll({
       order: [["retiredMonth", "DESC"]],
       where: {
         retiredMonth: req.param.retiredMonth
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Retired) {
+      res.json(Retired);
     });
   });
 
-  app.put("/api/manager/retired", function(req, res) {
-    db.Placeholder.update({
+  app.put("/api/retired", function(req, res) {
+    db.Retired.update({
       where: {
         retiredMonth: req.param.retiredMonth
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Retired) {
+      res.json(Retired);
     });
   });
 
-  app.delete("/api/manager/retired/:id", function(req, res) {
-    db.Placeholder.destroy({
+  app.delete("/api/retired/:id", function(req, res) {
+    db.Retired.destroy({
       where: {
         id: req.param.id
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Retired) {
+      res.json(Retired);
     });
   });
 
-  app.get("/api/manager/returns", function(req, res) {
-    db.Placeholder.findAll({
+  app.get("/api/returns", function(req, res) {
+    db.Return.findAll({
       where: {
         id: req.body.id,
         date: req.body.date,
         empID: req.body.empID
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Return) {
+      res.json(Return);
     });
   });
 
-  app.put("/api/manager/returns", function(req, res) {
-    db.Placeholder.update(req.body, {
+  app.put("/api/returns", function(req, res) {
+    db.Return.update(req.body, {
       where: {
         id: req.body.id,
         date: req.body.date,
         empID: req.body.empID
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Return) {
+      res.json(Return);
     });
   });
 
-  app.delete("/api/manager/returns/:id", function(req, res) {
-    db.Placeholder.destroy(req.body, {
+  app.delete("/api/returns/:id", function(req, res) {
+    db.Return.destroy(req.body, {
       where: {
         id: req.body.id
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Return) {
+      res.json(Return);
     });
   });
 
-  app.get("/api/manager/assets", function(req, res) {
-    db.Placeholder.findAll({
+  app.get("/api/assets", function(req, res) {
+    db.Asset.findAll({
       where: {
         itemTypeID: req.body.itemTypeID,
         itemName: req.body.itemName,
@@ -143,13 +143,13 @@ module.exports = function(app) {
         statusID: req.body.statusID,
         description: req.body.description
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Asset) {
+      res.json(Asset);
     });
   });
 
-  app.put("/api/manager/assets", function(req, res) {
-    db.Placeholder.update(req.body, {
+  app.put("/api/assets", function(req, res) {
+    db.Asset.update(req.body, {
       where: {
         itemTypeID: req.body.itemTypeID,
         itemName: req.body.itemName,
@@ -159,23 +159,23 @@ module.exports = function(app) {
         statusID: req.body.statusID,
         description: req.body.description
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Asset) {
+      res.json(Asset);
     });
   });
 
-  app.delete("/api/manager/assets/:id", function(req, res) {
-    db.Placeholder.destroy(req.body, {
+  app.delete("/api/assets/:id", function(req, res) {
+    db.Asset.destroy(req.body, {
       where: {
         id: req.params.id
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(Asset) {
+      res.json(Asset);
     });
   });
 
-  app.get("/api/manager/users", function(req, res) {
-    db.Placeholder.findAll({
+  app.get("/api/users", function(req, res) {
+    db.User.findAll({
       where: {
         department: req.body.department,
         firstName: req.body.firstName,
@@ -184,13 +184,13 @@ module.exports = function(app) {
         assetID: req.body.assetID,
         roleID: req.body.roleID
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(User) {
+      res.json(User);
     });
   });
 
-  app.put("/api/manager/users", function(req, res) {
-    db.Placeholder.update(req.body, {
+  app.put("/api/users", function(req, res) {
+    db.User.update(req.body, {
       where: {
         department: req.body.department,
         firstName: req.body.firstName,
@@ -199,18 +199,18 @@ module.exports = function(app) {
         assetID: req.body.assetID,
         roleID: req.body.roleID
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(User) {
+      res.json(User);
     });
   });
 
-  app.delete("/api/manager/users", function(req, res) {
-    db.Placeholder.destroy(req.body, {
+  app.delete("/api/users", function(req, res) {
+    db.User.destroy(req.body, {
       where: {
         id: req.params.id
       }
-    }).then(function(dbPlaceholder) {
-      res.json(dbPlaceholder);
+    }).then(function(User) {
+      res.json(User);
     });
   });
 };
