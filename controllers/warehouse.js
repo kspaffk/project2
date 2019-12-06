@@ -2,15 +2,14 @@ var models = require("../models");
 var moment = require('moment');
 
 var insert = function(object, cb) {
-  models.Asset.findOrCreate({ where: object }).spread(function(
-    asset,
-    wasCreated
-  ) {
-    cb(wasCreated);
-  }).catch(function(error) {
-    wasCreated = false;
-    cb(wasCreated);
-  });
+  models.Asset.findOrCreate({ where: object })
+    .spread(function(asset, wasCreated) {
+      cb(wasCreated);
+    })
+    .catch(function(error) {
+      wasCreated = false;
+      cb(wasCreated);
+    });
 };
 
 var assignAsset = function(object, cb) {

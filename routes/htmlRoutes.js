@@ -24,6 +24,10 @@ module.exports = function(app) {
     res.render("warehouse");
   });
 
+  app.get("/manager/", function(req, res) {
+    res.render("manager");
+  });
+
   // Render 404 page for any unmatched routes
   app.get("*", function(req, res) {
     res.render("404");
