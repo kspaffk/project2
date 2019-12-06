@@ -1,5 +1,7 @@
+// Creating User model
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define("User", {
+    
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -21,11 +23,11 @@ module.exports = function(sequelize, DataTypes) {
         len: [1, 20]
       }
     },
-    userName: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [4, 20]
+        len: [4, 50]
       }
     },
     password: {
