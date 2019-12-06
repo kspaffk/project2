@@ -7,7 +7,7 @@
     "start": "node server.js",
     "lint": "eslint --quiet .",
     "fix": "eslint --fix .",
-    "test": "npm run lint && cross-env NODE_ENV=test mocha -u tdd --reporter spec --exit"
+    "test": "npm run lint && cross-env NODE_ENV=test mocha -u bdd --reporter spec --exit"
   },
   "license": "ISC",
   "dependencies": {
@@ -16,11 +16,11 @@
     "express-handlebars": "^3.1.0",
     "express-session": "^1.17.0",
     "filedrop": "^2.0.0",
-    "moment": "^2.24.0",
     "mysql2": "^1.6.5",
     "papaparse": "^5.1.0",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
+    "passport-twitter": "^1.0.4",
     "sequelize": "^5.8.6"
   },
   "devDependencies": {
