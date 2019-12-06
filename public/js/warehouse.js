@@ -158,11 +158,10 @@ var createOneAsset = function() {
 
 var updateOneAsset = function() {
     var header = $("<div>")
-    .addClass("sub-header")
-    .text("Update an Asset");
+        .addClass("sub-header")
+        .text("Update an Asset");
     var errorDiv = $("<div>").addClass("error-txt");
-    var instructions = $("<div>")
-        .addClass("instructions");
+    var instructions = $("<div>").addClass("instructions");
     var assetDrop = createAssetDropdown();
 
     var btnSelectAsset = $("<button>")
@@ -287,7 +286,7 @@ var returnOneAsset = function() {
             UserEmpID: userEmpID,
             AssetId: assetID
         });
-        console.log(returnStr)
+        console.log(returnStr);
 
         $.ajax({
             type: "PUT",
@@ -324,35 +323,14 @@ var createBulk = function() {
         );
     var dropCSV = $("<div>")
         .attr("id", "dropcsv")
-        .text("Drop your CSV file here!");
+        .text("Drop your CSV file here OR click to choose a file!");
 
     $(".container").append(header, errorDiv, instructions, dropCSV);
 
-    // FileDrop and PapaParse section for importing CSV files
-    var options = { input: false };
-    var dropzone = new FileDrop("dropcsv", options);
+    readCSVFile(function(csvParsed) {
+        var validCSVArray = [];
 
-    dropzone.event("send", function(files) {
-        files.each(function(file) {
-            file.readData(
-                createJSONFromCSV,
-                function(e) {
-                    console.log("There was an error reading the file: " + e);
-                },
-                "text"
-            );
-        });
-    });
-
-    function createJSONFromCSV(str) {
-        var config = {
-            header: true
-        };
-
-        validCSVArray = [];
-
-        var jsonObject = Papa.parse(str, config).data;
-        jsonObject.forEach(line => {
+        csvParsed.forEach(line => {
             if (
                 line.serialNumber != "" &&
                 line.serialNumber &&
@@ -406,7 +384,7 @@ var createBulk = function() {
             createBackBtn();
             $(".container").append(table);
         });
-    }
+    });
 };
 
 const formatDate = function(dateStr) {
@@ -526,8 +504,7 @@ const createAssetDropdown = function() {
     return assetDropdown;
 };
 
-const createPageForUpdateOne = function() {
-};
+const createPageForUpdateOne = function() {};
 
 const createBackBtn = function() {
     var btnWarehouse = $("<button>")
@@ -537,4 +514,35 @@ const createBackBtn = function() {
     $(".btn-warehouse").on("click", function(event) {
         $(location).attr("href", "/warehouse/");
     });
+};
+
+const readCSVFile = function(cb) {
+    fd.jQuery();
+    var csvParsed;
+    // FileDrop and PapaParse section for importing CSV files
+    $("#dropcsv")
+        .filedrop()
+        .on("fdsend", function(e, files) {
+            $.each(files, function(i, file) {
+                file.readData(
+                    parseFile,
+                    function(e) {
+                        console.log(
+                            "There was an error reading the file: " + e
+                        );
+                    },
+                    "text"
+                );
+            });
+        });
+
+    var parseFile = async function(str) {
+        var config = {
+            header: true,
+            skipEmptyLines: true
+        };
+        csvParsed = await Papa.parse(str, config).data;
+        console.log(csvParsed);
+        cb(csvParsed);
+    };
 };

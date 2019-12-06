@@ -129,7 +129,7 @@ input {
   color: white;
 }
 
-.btn-green {
+.btn-green, .fd-file {
   background-color: #009600;
   color: white;
 }
@@ -148,7 +148,6 @@ input {
   display: inline-block;
   padding: 20px;
   margin: 30px;
-  background-color: #7dcd7d;
-  width: 150px;
-  height: 75px;
+  background-color: #009600;
+  color: white;
 }
