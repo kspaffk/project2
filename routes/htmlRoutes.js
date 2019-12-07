@@ -17,9 +17,8 @@ module.exports = function(app) {
 
   // Load example page and pass in an example by id
   app.get("/user/", function(req, res) {
-      request = JSON.stringify(req);
-      console.log(`REQ IS: ${request}`)
-      res.render("users");
+    console.log(req);
+    res.render("users", { user: req.user });
   });
 
   app.get("/warehouse/", function(req, res) {
