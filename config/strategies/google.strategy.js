@@ -1,4 +1,7 @@
 var passport = require("passport");
+var models = require("../../models");
+var moment = require('moment');
+var date = moment();
 
 // Google strategy used by passport
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
@@ -24,8 +27,25 @@ module.exports = function() {
       user.google.id = profile.id;
       user.google.token = accessToken;
 
-      console.log(profile);
-      done(null, user);
+      // insertUser(profile, function(dbUser, wasCreated) {
+      //   console.log(dbUser);
+      var insertUser = function(profile, cb) {
+        models.User.findOrCreate({ where: {email: profile.email, lastName: profile.name.familyName, firstName: profile.name.givenName, createdAt: date }})
+          .spread(function(dbUser, wasCreated) {
+            console.log(dbUser);
+            cb(dbUser, wasCreated);
+          })
+          .catch(function(error) {
+            var wasCreated = false;
+            cb(error);
+          });
+          // console.log(profile);
+      // done(error, user);
+        } 
+        insertUser(profile, function(dbUser, wasCreated) {
+          console.log("THIS IS RUNNING");
+          done(wasCreated, dbUser);
+        });
     }
   ));
 };

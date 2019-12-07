@@ -45,6 +45,12 @@ module.exports = function(app) {
         });
     });
 
+    app.get("/api/user/:email", function(req, res) {
+        db.User.findOne({ where: { email: req.params.email }}).then(function(user) {
+            res.json(user);
+        });
+    });
+
     app.get("/api/itemtypes", function(req, res) {
         db.ItemType.findAll({}).then(function(itemTypes) {
             res.json(itemTypes);
