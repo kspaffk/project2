@@ -14,7 +14,7 @@ module.exports = function(app) {
     });
   });
 
-  app.put("/api/itemtype", function(req, res) {
+  app.put("/api/itemTypes", function(req, res) {
     db.ItemType.update(req.body, {
       where: {
         type: req.param.type
@@ -178,9 +178,6 @@ module.exports = function(app) {
     db.User.findAll({
       where: {
         department: req.body.department,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        empID: req.body.empID,
         assetID: req.body.assetID,
         roleID: req.body.roleID
       }
@@ -193,9 +190,6 @@ module.exports = function(app) {
     db.User.update(req.body, {
       where: {
         department: req.body.department,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        empID: req.body.empID,
         assetID: req.body.assetID,
         roleID: req.body.roleID
       }
