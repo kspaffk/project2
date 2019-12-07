@@ -6,7 +6,7 @@ var router = express.Router();
 router.route("/google/callback")
 // Tell passport to use google strategy (JSON passed in) go to users route
   .get(passport.authenticate("google", {
-    successRedirect: "/users/",
+    successRedirect: "/user/",
     failure: "/error/"
   }));
 
@@ -23,7 +23,7 @@ router.route("/google")
 router.route("/twitter/callback")
 // Tell passport to use twitter strategy (JSON passed in) go to users route
   .get(passport.authenticate("twitter", {
-    successRedirect: "/users/",
+    successRedirect: "/user/",
     failure: "/error/"
   }));
 

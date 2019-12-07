@@ -11,13 +11,15 @@ module.exports = function(app) {
     });
   });
 
+  app.get("/error/", function(req, res) {
+    res.render("error");
+  });
+
   // Load example page and pass in an example by id
-  app.get("/user/:id", function(req, res) {
-    db.User.findOne({ where: { id: req.params.id } }).then(function(dbUser) {
-      res.render("user", {
-        user: dbUser
-      });
-    });
+  app.get("/user/", function(req, res) {
+      request = JSON.stringify(req);
+      console.log(`REQ IS: ${request}`)
+      res.render("users");
   });
 
   app.get("/warehouse/", function(req, res) {

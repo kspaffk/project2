@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "notReal",
+    "password": "password1",
     "database": "inv_mgmt",
     "host": "localhost",
     "dialect": "mysql"
