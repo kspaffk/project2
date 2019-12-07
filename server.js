@@ -5,7 +5,7 @@ var passport = require("passport");
 var session = require("express-session");
 var db = require("./models");
 // var routes = require('./routes/htmlRoutes');
-var users = require("./routes/users");
+// var users = require("./routes/users");
 var auth = require("./routes/auth");
 
 var app = express();
@@ -21,7 +21,7 @@ app.use(session({ secret: "anything" }));
 
 require("./config/passport")(app);
 
-app.use("/users", users);
+// app.use("/users", users);
 app.use("/auth", auth);
 
 // Handlebars
