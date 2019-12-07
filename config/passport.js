@@ -1,5 +1,9 @@
 var passport = require("passport");
 
+// create the following strategy pages
+// var LocalStrategy    = require('passport-local').Strategy;
+// var FacebookStrategy = require('passport-facebook').Strategy;
+
 module.exports = function(app) {
 // Pull in passport middleware to set up framework that it needs
 app.use(passport.initialize());
@@ -16,4 +20,6 @@ passport.deserializeUser(function(user, done) {
 });
 
 require("./strategies/google.strategy")();
+
+require("./strategies/twitter.strategy")();
 };
