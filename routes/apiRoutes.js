@@ -45,6 +45,13 @@ module.exports = function(app) {
         });
     });
 
+
+    app.get("/api/assetsassigned/:userID", function(req, res) {
+        db.Asset.findAll({ where: { UserEmpId: req.params.userID } }).then(function(user) {
+            res.json(user);
+        })
+    });
+
     app.get("/api/user/:email", function(req, res) {
         db.User.findOne({ where: { email: req.params.email }}).then(function(user) {
             res.json(user);
