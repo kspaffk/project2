@@ -1,7 +1,7 @@
 var db = require("../models");
 
 module.exports = function(app) {
-  app.get("/api/itemtype", function(req, res) {
+  app.get("/api/itemTypes", function(req, res) {
     db.ItemType.findAndCountAll({
       order: [["type", "ACS"]],
       where: {
@@ -25,7 +25,7 @@ module.exports = function(app) {
     });
   });
 
-  app.delete("/api/itemtype/:id", function(req, res) {
+  app.delete("/api/itemType/:id", function(req, res) {
     db.ItemType.destroy({
       where: {
         id: req.param.id
