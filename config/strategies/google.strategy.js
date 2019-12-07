@@ -35,8 +35,9 @@ module.exports = function() {
           }
         })
           .spread(function(dbUser, wasCreated) {
-            console.log(`THIS WAS WAS CREATED: ${wasCreated}`);
+            console.log(`THIS WAS CREATED: ${wasCreated}`);
             console.log(JSON.stringify(dbUser));
+
             done(null, dbUser);
           })
           .catch(function(error) {
