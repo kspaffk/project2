@@ -1,13 +1,12 @@
 var passport = require("passport");
 
 // Twitter strategy used by passport
-var twitterStrategy = require("passport-twitter").Strategy;
-
-modules.exports = function() {
+var TwitterStrategy = require("passport-twitter").Strategy;
+module.exports = function() {
   passport.use(new TwitterStrategy( {
     consumerKey: 'aPzAyfZnwp0cTTQNYfMBMM5U8',
-    consmerSecret: 'j8zY7ITIRQ9IhNiUe2649UDs3163kihvujEW9qsGWxNVpf6pZH',
-    callbackURL: 'http://localhost:3000/twitter/callback',
+    consumerSecret: 'j8zY7ITIRQ9IhNiUe2649UDs3163kihvujEW9qsGWxNVpf6pZH',
+    callbackURL: 'http://127.0.0.1:3000/twitter/callback',
     passReqToCallback: true
   },
   function(req, token, tokenSecret, profile, done) {
@@ -22,6 +21,7 @@ modules.exports = function() {
     user.twitter.id = profile.id;
     user.twitter.token = accessToken;
 
+    console.log(profile);
     done(null, user);
  }))
 };
