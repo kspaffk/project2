@@ -27,6 +27,8 @@ var itemTypes = function() {
   var instructions = $("<div>")
     .addClass("instructions")
     .html("<p>A count of all item types</p>");
+
+  var formContainer = createForm("itemTypes");
   var dropdown = createDropdown("itemTypes");
   var btnDiv = $("<div>").addClass("button-div");
   var button = $("<button>")
@@ -35,20 +37,40 @@ var itemTypes = function() {
       id: "btn-return"
     })
     .addClass("btn-green")
-    .text("Return Asset");
+    .text("Add Item Type");
   btnDiv.append(button);
-  $(".container").append(header, errorDiv, instructions, dropdown, btnDiv);
+  $(".container").append(
+    header,
+    errorDiv,
+    instructions,
+    dropdown,
+    formContainer,
+    btnDiv
+  );
   $("#btn-return").on("click", function(event) {
-      var itemTypeID = $("#select-itemTypes").val();
+    var itemTypeArray = [];
+    var itemType = {};
+    itemType.itemType = $("#itemType").val();
+    itemTypeArray.push(itemType);
+    var data = JSON.stringify(itemTypeArray);
     $.ajax({
       type: "POST",
       url: "/api/itemTypes",
       contentType: "application/json",
-      data: itemTypes
-    }).then(function(itemTypesChanged) {
-      $(".instructions").html(
-        "<p>You have succesfully edited this item type</p>"
-      );
+      data: data
+    }).then(function(result) {
+      if (result[0].wasCreated) {
+        $(".error-txt").html("");
+        $(".instructions").html(
+          "<p>The item type was created successfully.</p>"
+        );
+        $(".form-container, #btn-create").remove();
+        createBackBtn();
+      } else {
+        $(".error-txt").html(
+          "<p>This item type already exists or there was another form error!</p>"
+        );
+      }
     });
   });
 };
@@ -74,21 +96,21 @@ const createItemTypeTable = function(itemtypes) {
 
 const createDropdown = function(dataType) {
   var dropdown;
-  console.log(dataType)
+  console.log(dataType);
   var header = "<h3>" + dataType + "</h3>";
   var drop = $("<div>")
     .addClass(dataType + "-drop")
     .html(header);
   var select = $("<select>").attr("id", "select-" + dataType);
   $.get("/api/" + dataType, function(data) {
-      console.log(data)
+    console.log(data);
     data.forEach(item => {
       var optionText;
       switch (dataType) {
         case "itemTypes":
           optionText = item.itemType;
           dataID = item.id;
-          console.log(dataID)
+          console.log(dataID);
           break;
         case "roles":
           optionText = item.roleName;
@@ -115,75 +137,22 @@ const createDropdown = function(dataType) {
 };
 
 const createForm = function(dataType) {
-    var dataForm;
-    var formContainer = $("<div>").addClass("form-container");
-    var form = $("<form>");
-    var labelSN = $("<label>")
-        .attr("for", "serial-num")
-        .text("Serial Number:");
-    var inputSN = $("<input>")
-        .attr({
-            type: "text",
-            id: "serial-num",
-            placeholder: "Enter Serial Number"
-        })
-        .text("Serial Number");
-    var labelDesc = $("<label>")
-        .attr("for", "description")
-        .text("Description:");
-    var inputDesc = $("<input>").attr({
-        type: "text",
-        id: "description",
-        placeholder: "Enter Asset Description"
-    });
-    var labelModel = $("<label>")
-        .attr("for", "item-name")
-        .text("Item Name:");
-    var inputModel = $("<input>").attr({
-        type: "text",
-        id: "item-name",
-        placeholder: "Enter Asset Model or Item Name"
-    });
-    var labelPurchDate = $("<label>")
-        .attr("for", "purchase-date")
-        .text("Purchase Date:");
-    var inputPurchDate = $("<input>").attr({
-        type: "text",
-        id: "purchase-date",
-        placeholder: "Enter Purchase Date using MM/DD/YYYY"
-    });
-    var labelDrop = $("<label>")
-        .attr({
-            for: "select-itemtype",
-            id: "label-drop"
-        })
-        .text("Item Type:");
-    var userDrop = $("<div>").addClass("user-drop");
-    var selectItemType = $("<select>").attr("id", "select-itemtype");
-    $.get("/api/itemtypes", function(itemTypes) {
-        itemTypes.forEach(item => {
-            var options = $("<option>")
-                .attr("value", item.id)
-                .text(item.itemType);
-            selectItemType.append(options);
-        });
-    });
-    userDrop.append(selectItemType);
+  var dataForm;
+  var formContainer = $("<div>").addClass("form-container");
+  var form = $("<form>");
+  var input = $("<label>")
+    .attr("for", dataType)
+    .text(dataType);
+  var inputType = $("<input>")
+    .attr({
+      type: "text",
+      id: dataType,
+      placeholder: "Enter New " + dataType
+    })
+    .text(dataType);
+  form.append(input, inputType);
+  formContainer.append(form);
+  dataForm = formContainer;
 
-    form.append(
-        labelSN,
-        inputSN,
-        labelDesc,
-        inputDesc,
-        labelModel,
-        inputModel,
-        labelPurchDate,
-        inputPurchDate,
-        labelDrop,
-        userDrop
-    );
-    formContainer.append(form);
-    assetForm = formContainer;
-
-    return assetForm;
+  return dataForm;
 };

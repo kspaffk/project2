@@ -14,14 +14,20 @@ module.exports = function(app) {
     });
   });
 
+  app.post("/api/itemTypes", function(req, res) {
+    db.ItemType.create(req.body
+    ).then(function(ItemType) {
+      res.json(ItemType);
+    });
+
   app.put("/api/itemTypes", function(req, res) {
     db.ItemType.update(req.body, {
       where: {
         type: req.param.type
       }
     }).then(function(ItemType) {
-      console.log(ItemType.rows);
-      res.json(ItemType.rows);
+      console.log(ItemType);
+      res.json(ItemType);
     });
   });
 
@@ -31,8 +37,8 @@ module.exports = function(app) {
         id: req.param.id
       }
     }).then(function(ItemType) {
-      console.log(ItemType.rows);
-      res.json(ItemType.rows);
+      console.log(ItemType);
+      res.json(ItemType);
     });
   });
 
