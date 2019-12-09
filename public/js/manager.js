@@ -1,6 +1,7 @@
 $(document).ready(function() {
-  $(".department").on("click", function(event) {
+  $(".departments").on("click", function(event) {
     $(".container").empty();
+    departments();
   });
   $(".roles").on("click", function(event) {
     $(".container").empty();
@@ -16,20 +17,19 @@ $(document).ready(function() {
 
 $(".sidebar-header").text("Manager");
 $(".sidebar-header").on("click", function() {
-  $(location).attr("href", "/manager/");
+  $(location).attr("href", "/manager");
 });
 
 var itemTypes = function() {
   var header = $("<div>")
     .addClass("sub-header")
-    .text("Items and their descriptions");
+    .text("Add a new item type");
   var errorDiv = $("<div>").addClass("error-txt");
   var instructions = $("<div>")
     .addClass("instructions")
-    .html("<p>A count of all item types</p>");
+    .html("<p>Enter the name of the item you wish to add</p>");
 
   var formContainer = createForm("itemTypes");
-  var dropdown = createDropdown("itemTypes");
   var btnDiv = $("<div>").addClass("button-div");
   var button = $("<button>")
     .attr({
@@ -43,55 +43,65 @@ var itemTypes = function() {
     header,
     errorDiv,
     instructions,
-    dropdown,
     formContainer,
     btnDiv
   );
   $("#btn-return").on("click", function(event) {
-    var itemTypeArray = [];
-    var itemType = {};
-    itemType.itemType = $("#itemType").val();
-    itemTypeArray.push(itemType);
-    var data = JSON.stringify(itemTypeArray);
+    var itemType = {itemType: $("#itemTypes").val()};
+    var data = JSON.stringify(itemType);
+    console.log(data)
     $.ajax({
       type: "POST",
       url: "/api/itemTypes",
       contentType: "application/json",
       data: data
-    }).then(function(result) {
-      if (result[0].wasCreated) {
-        $(".error-txt").html("");
-        $(".instructions").html(
-          "<p>The item type was created successfully.</p>"
-        );
-        $(".form-container, #btn-create").remove();
-        createBackBtn();
-      } else {
-        $(".error-txt").html(
-          "<p>This item type already exists or there was another form error!</p>"
-        );
-      }
     });
   });
 };
+
+var departments = function() {
+    var header = $("<div>")
+      .addClass("sub-header")
+      .text("Add a new department");
+    var errorDiv = $("<div>").addClass("error-txt");
+    var instructions = $("<div>")
+      .addClass("instructions")
+      .html("<p>Enter the name and description of the department you wish to add</p>");
+  
+    var formContainer = createForm("Department");
+    var formContainer2 = createForm("Description");
+    var btnDiv = $("<div>").addClass("button-div");
+    var button = $("<button>")
+      .attr({
+        type: "button",
+        id: "btn-return"
+      })
+      .addClass("btn-green")
+      .text("Add Department and Description");
+    btnDiv.append(button);
+    $(".container").append(
+      header,
+      errorDiv,
+      instructions,
+      formContainer,
+      formContainer2,
+      btnDiv
+    );
+    $("#btn-return").on("click", function(event) {
+      var department = {department: $("#Department").val()};
+      var data = JSON.stringify(department, description);
+      console.log(data)
+      $.ajax({
+        type: "POST",
+        url: "/api/departments",
+        contentType: "application/json",
+        data: data
+      });
+    });
+  };
 
 const formatDate = function(dateStr) {
   return moment(dateStr, "MM/DD/YYYY", false).format();
-};
-
-const createItemTypeTable = function(itemtypes) {
-  var itemTable;
-  var row = $("<tr>");
-  $.get("/api/itemtypes", function(itemTypes) {
-    itemTypes.forEach(element => {
-      var tdID = $("<td>").text(itemTypes.id);
-      var tdItemType = $("<td>").text(itemTypes.itemType);
-      row.append(tdID, tdItemType);
-      $(".item-types").append(row);
-    });
-  });
-  itemTable = row;
-  return itemTable;
 };
 
 const createDropdown = function(dataType) {
@@ -155,4 +165,14 @@ const createForm = function(dataType) {
   dataForm = formContainer;
 
   return dataForm;
+};
+
+const createBackBtn = function() {
+    var btnWarehouse = $("<button>")
+        .addClass("btn-manager btn-orange")
+        .text("Back");
+    $(".container").append(btnWarehouse);
+    $(".btn-manager").on("click", function(event) {
+        $(location).attr("href", "/manager");
+    });
 };
