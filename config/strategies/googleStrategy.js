@@ -1,8 +1,6 @@
-require('dotenv').config()
+require("dotenv").config();
 var passport = require("passport");
 var models = require("../../models");
-require('dotenv').config()
-var keys = require("../../keys");
 
 // Google strategy used by passport
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
@@ -13,9 +11,9 @@ module.exports = function() {
   passport.use(
     new GoogleStrategy(
       {
-        clientID: keys.google.strategy.GOOGLE_CID,
-        clientID: keys.google.strategy.GOOGLE_SECRET,
-        callbackURL: keys.google.strategy.GOOGLE_CB
+        clientID: process.env.GOOG_CLIENTID,
+        clientSecret: process.env.GOOG_CLIENTSECRET,
+        callbackURL: process.env.GOOG_CBURL
       },
       // Called when google returns profile data back to the callback URL
       function(req, accessToken, refreshToken, profile, done) {
