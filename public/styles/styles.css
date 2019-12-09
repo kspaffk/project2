@@ -172,3 +172,7 @@ input {
   background: #55acee;
   color: #ffffff;
 }
+
+.card {
+  margin-bottom: 15px;
+}
