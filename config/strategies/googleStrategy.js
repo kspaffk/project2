@@ -30,7 +30,7 @@ module.exports = function() {
             done(null, dbUser);
           })
           .catch(function(error) {
-            done(error, null);
+            done(error);
           });
       }
     )
