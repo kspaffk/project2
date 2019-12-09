@@ -8,16 +8,15 @@ module.exports = function(app) {
   // Passport uses to place into the session
   passport.serializeUser(function(user, done) {
     console.log(`DONE DONE DONE SERIALIZE USER`)
-    console.log(user)
     done(null, user);
   });
   // Passport uses to pull from session
   passport.deserializeUser(function(user, done) {
-    // user.findById(empId);
+    //user.findById(empId);
     done(null, user);
   });
 
-  require("./strategies/google.strategy")();
+  require("./strategies/googleStrategy")();
 
-  // require("./strategies/twitter.strategy")();
+  // require("./strategies/twitterStrategy")();
 };

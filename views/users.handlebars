@@ -1,9 +1,17 @@
- <div>
-    {{user.email}}
-    {{user.firstName}}
-    {{user.lastName}}
-    {{user.empID}}
-  </div>
-
-  <script src="/js/user">
+<div class="container">
+    <div>
+      <div class="sub-header">Assets Assigned</div>
+        {{#each assets}}
+        <div class="card">
+          <div class="card-body">
+            <p>Serial Number: {{serialNumber}}</p>
+            <p>Item Name: {{itemName}}</p>
+            <p>Description: {{description}}</p>
+            <p>Assign Date: {{assignDate}}</p>
+          </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+  <script src="/js/user.js">
   </script>
