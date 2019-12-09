@@ -4,6 +4,7 @@ const Op = db.Sequelize.Op;
 
 module.exports = function(app) {
   app.get("/api/assets", function(req, res) {
+    console.log("GET API ASSETS")
     db.Asset.findAll({}).then(function(assets) {
       res.json(assets);
     });
@@ -48,7 +49,7 @@ module.exports = function(app) {
   });
 
   app.get("/api/assetsassigned/:userID", function(req, res) {
-    db.Asset.findAll({ where: { id: req.params.userID } }).then(function(user) {
+    db.Asset.findAll({ where: { UserEmpID: req.params.userID } }).then(function(user) {
       res.json(user);
     });
   });

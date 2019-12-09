@@ -17,16 +17,6 @@ module.exports = function() {
       },
       // Called when google returns profile data back to the callback URL
       function(req, accessToken, refreshToken, profile, done) {
-        var user = {};
-
-        user.email = profile.emails[0].value;
-        user.image = profile.photos[0].value;
-        user.displayName = profile.displayName;
-
-        user.google = {};
-        user.google.id = profile.id;
-        user.google.token = accessToken;
-
         models.User.findOrCreate({
           where: {
             email: profile.emails[0].value,
@@ -35,8 +25,7 @@ module.exports = function() {
           }
         })
           .spread(function(dbUser, wasCreated) {
-            console.log(`THIS WAS CREATED: ${wasCreated}`);
-            console.log(JSON.stringify(dbUser));
+            console.log(`USER ADDED TO DB created = true: ${wasCreated}`);
 
             done(null, dbUser);
           })
