@@ -1,5 +1,7 @@
+// Creating User model
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define("User", {
+    
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -21,20 +23,20 @@ module.exports = function(sequelize, DataTypes) {
         len: [1, 20]
       }
     },
-    userName: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [4, 20]
+        len: [4, 50]
       }
     },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [8, 20]
-      }
-    },
+    // password: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    //   validate: {
+    //     len: [8, 20]
+    //   }
+    // },
     empID: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -44,14 +46,18 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   User.associate = function(models) {
-    User.belongsTo(models.Role);
+    User.belongsTo(models.Role, {
+      allowNull: true
+    });
     User.hasMany(models.Asset, {
       onDelete: "SET NULL"
     });
     User.hasMany(models.Return, {
+      onDelete: "SET NULL"
+    });
+    User.belongsTo(models.Department, {
       allowNull: true
     });
-    User.belongsTo(models.Department);
   };
 
   return User;

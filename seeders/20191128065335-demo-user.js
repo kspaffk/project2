@@ -5,29 +5,25 @@ module.exports = {
       return queryInterface.bulkInsert('Users', [{
         firstName: 'Bob',
         lastName: 'Barker',
-        username: 'bobbarker',
-        password: 'youknowit',
+        email: 'bobbarker@gmail.com',
         createdAt: new Date(),
         updatedAt: new Date(),
       }, {
         firstName: 'Adam',
         lastName: 'Sandler',
-        username: 'adamsand',
-        password: 'youknowit',
+        email: 'adamsand@gmail.com',
         createdAt: new Date(),
         updatedAt: new Date(),
       }, {
         firstName: 'George',
         lastName: 'Carlin',
-        username: 'georgecarlin',
-        password: 'youknowit',
+        email: 'georgecarlin@gmail.com',
         createdAt: new Date(),
         updatedAt: new Date(),
       }, {
         firstName: 'Crap',
         lastName: 'Bag',
-        username: 'crapbag',
-        password: 'youknowit',
+        email: 'crapbag@gmail.com',
         createdAt: new Date(),
         updatedAt: new Date(),
       }], {});
