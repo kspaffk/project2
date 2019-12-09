@@ -1,7 +1,12 @@
 {
   "development": {
+<<<<<<< HEAD
     "username": "process.env.DB_USER",
     "password": "process.env.DB_PASS",
+=======
+    "username": "chris",
+    "password": "root1root",
+>>>>>>> 25c5225b1754e5b82a1a8dbe943f93682374f2b2
     "database": "inv_mgmt",
     "host": "localhost",
     "dialect": "mysql"
