@@ -9,9 +9,9 @@ module.exports = function() {
   passport.use(
     new TwitterStrategy(
       {
-        consumerKey: keys.twitterStrategy.TWITTER_KEY,
-        consumerSecret: keys.twitterStrategy.TWITTER_SECRET,
-        TwitterCallBackURL: keys.twitterStrategy.TWITTER_CB,
+        consumerKey: keys.twitter.strategy.TWITTER_KEY,
+        consumerSecret: keys.twitter.strategy.TWITTER_SECRET,
+        callbackURL: keys.twitter.strategy.TWITTER_CB,
         passReqToCallback: true
       },
       function(req, token, tokenSecret, profile, done) {
