@@ -49,13 +49,7 @@ module.exports = function(app) {
   });
 
   app.get("/api/users", function(req, res) {
-    db.User.findAll({
-      where: {
-        department: req.body.department,
-        assetID: req.body.assetID,
-        roleID: req.body.roleID
-      }
-    }).then(function(User) {
+    db.User.findAll({}).then(function(User) {
       res.json(User);
     });
   });
@@ -64,8 +58,7 @@ module.exports = function(app) {
     db.User.update(req.body, {
       where: {
         department: req.body.department,
-        assetID: req.body.assetID,
-        roleID: req.body.roleID
+        roleName: req.body.roleName
       }
     }).then(function(User) {
       res.json(User);

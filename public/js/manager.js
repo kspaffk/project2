@@ -3,9 +3,6 @@ $(document).ready(function() {
     $(".container").empty();
     departments();
   });
-  $(".roles").on("click", function(event) {
-    $(".container").empty();
-  });
   $(".types").on("click", function(event) {
     $(".container").empty();
     itemTypes();
@@ -92,6 +89,51 @@ var departments = function() {
       description: description.val().trim()
     };
     submitData(newDepartment, "departments").then(function() {
+      $("input").val("");
+    });
+  });
+};
+
+var users = function() {
+  var header = $("<div>")
+    .addClass("sub-header")
+    .text("Edit users");
+  var errorDiv = $("<div>").addClass("error-txt");
+  var instructions = $("<div>")
+    .addClass("instructions")
+    .html(
+      "<p>Select the  department and role for the user you wish to change</p>"
+    );
+  var dropdownContainer = $("<div>").addClass("dropdown-container");
+  departmentDropdown = createDropdown("Departments");
+  rolesDropdown = createDropdown("Roles");
+  dropdownContainer.append(departmentDropdown, rolesDropdown);
+  
+  var btnDiv = $("<div>").addClass("button-div");
+  var button = $("<button>")
+    .attr({
+      type: "button",
+      id: "btn-submit"
+    })
+    .addClass("btn-green")
+    .text("Add Department and Description");
+  btnDiv.append(button);
+  $(".container").append(
+    header,
+    errorDiv,
+    instructions,
+    departmentDropdown,
+    rolesDropdown,
+    btnDiv
+  );
+  $("#btn-submit").on("click", function(event) {
+    var department = $("#Department");
+    var role = $("#Role");
+    var changeUser = {
+      department: department.val(),
+      role: role.val()
+    };
+    submitData(changeUser, "users").then(function() {
       $("input").val("");
     });
   });
