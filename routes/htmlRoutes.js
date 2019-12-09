@@ -3,6 +3,10 @@ var whController = require("../controllers/warehouse");
 
 module.exports = function(app) {
     app.use("/auth", auth);
+    app.get('/logout', function(req, res){
+        req.logout();
+        res.redirect('/');
+      });
     app.get("*", function(req, res) {
         console.log("Getting ******************");
         console.log(req.user);
@@ -11,10 +15,10 @@ module.exports = function(app) {
             res.render("index");
         } else {
             console.log("REQ USER IS HERE!!");
-            if (req.user.RoleId == 2) {
+            if (req.user.RoleId == 1) {
                 console.log("REQ USER IS 2");
                 res.render("manager");
-            } else if (req.user.RoleId == 4) {
+            } else if (req.user.RoleId == 3) {
                 console.log("REQ USER IS 4");
                 res.render("warehouse");
             } else {
@@ -26,7 +30,7 @@ module.exports = function(app) {
                     console.log(asset.dataValues);
                     assetArray.push(asset.dataValues);
                   });
-                  hbsObject = { assets: assetArray }; 
+                  hbsObject = { assets: assetArray, user: req.user }; 
                   res.render("users", hbsObject);
                 });
             }
