@@ -1,3 +1,4 @@
+require("dotenv").config();
 var passport = require("passport");
 var models = require("../../models");
 
@@ -10,10 +11,9 @@ module.exports = function() {
   passport.use(
     new GoogleStrategy(
       {
-        clientID:
-          "915481890439-v5lfe6idpujd9toa27cd35fongdgb9rg.apps.googleusercontent.com",
-        clientSecret: "tpWX1-7SmwKTmSVMaY_PMjc6",
-        callbackURL: "http://localhost:3000/auth/google/callback"
+        clientID: process.env.GOOG_CLIENTID,
+        clientSecret: process.env.GOOG_CLIENTSECRET,
+        callbackURL: process.env.GOOG_CBURL
       },
       // Called when google returns profile data back to the callback URL
       function(req, accessToken, refreshToken, profile, done) {
@@ -35,8 +35,9 @@ module.exports = function() {
           }
         })
           .spread(function(dbUser, wasCreated) {
-            console.log(`THIS WAS WAS CREATED: ${wasCreated}`);
+            console.log(`THIS WAS CREATED: ${wasCreated}`);
             console.log(JSON.stringify(dbUser));
+
             done(null, dbUser);
           })
           .catch(function(error) {

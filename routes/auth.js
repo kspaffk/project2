@@ -8,7 +8,7 @@ router
   // Tell passport to use google strategy (JSON passed in) go to users route
   .get(
     passport.authenticate("google", {
-      successRedirect: "/user/",
+      successRedirect: "/",
       failure: "/error/"
     })
   );
