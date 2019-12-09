@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 var passport = require("passport");
 // var newTwitter require("");
 var keys = require("../../keys");
@@ -9,9 +9,9 @@ module.exports = function() {
   passport.use(
     new TwitterStrategy(
       {
-        consumerKey: keys.twitter.strategy.TWITTER_KEY,
-        consumerSecret: keys.twitter.strategy.TWITTER_SECRET,
-        callbackURL: keys.twitter.strategy.TWITTER_CB,
+        consumerKey: process.env.TWIT_CONSUMERKEY,
+        consumerSecret: process.env.TWIT_CONSUMERSECRET,
+        callbackURL: process.env.TWIT_CBURL,
         passReqToCallback: true
       },
       function(req, token, tokenSecret, profile, done) {
