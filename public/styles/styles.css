@@ -50,6 +50,7 @@ input {
     font-family: "Ubuntu Condensed", sans-serif;
     font-size: 18px;
     width: 300px;
+    margin-bottom: 10px;
 }
 
 .title {
@@ -70,28 +71,43 @@ input {
 .sidebar {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
-    display: flex;
-    background: #96afff;
+    display: grid;
+    grid-template-rows: auto auto;
+    background: #8cd296;
     font-size: 16px;
     line-height: 1.6em;
-    height: 100px;
+    height: 125px;
     margin: 15px 10px;
     align-items: center;
     border-radius: 10px;
     color: black;
 }
 
-.body-header {
+.sidebar-header {
+    grid-row: 1 / 2;
     font-family: "Libre Barcode 128 Text", cursive;
     font-size: 50px;
     align-self: center;
-    margin: 0 10px;
+    margin: 15px 10px;
+    padding: 5px;
+}
+
+.logout {
+    grid-row: 2 / 3;
+    text-align: center;
+    margin: 15px;
+}
+
+#logout-link {
+    text-decoration: none;
+    padding: 15px;
+    color: white;
 }
 
 .container {
     padding: 15px 5px;
     margin: 15px 15px;
-    background-color: rgba(150, 175, 255, .4);
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 10px;
 }
 
@@ -139,14 +155,14 @@ input {
     font-weight: bold;
 }
 
-.btn-blue {
+.btn-blue,
+.fd-file {
     background-color: #000096;
     color: white;
     border-radius: 5px;
 }
 
-.btn-green,
-.fd-file {
+.btn-green {
     background-color: #009600;
     color: white;
     border-radius: 5px;
@@ -167,7 +183,7 @@ input {
     display: inline-block;
     padding: 20px;
     margin: 30px;
-    background-color: #009600;
+    background-color: #000096;
     color: white;
 }
 
@@ -200,6 +216,10 @@ input {
     font-size: 14px;
 }
 
+.form-container {
+    margin-left: 20px;
+}
+
 @media screen and (max-width: 775px) {
     .title {
         font-size: 50px;
@@ -212,9 +232,12 @@ input {
         grid-template-columns: 150px auto auto auto;
         grid-template-rows: 100px auto;
     }
-    .body-header {
+    .sidebar-header {
         font-size: 35px;
         padding: 5px;
+    }
+    body {
+        font-size: 16px;
     }
 }
 

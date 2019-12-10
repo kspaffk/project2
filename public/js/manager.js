@@ -20,6 +20,11 @@ $(".sidebar-header").on("click", function() {
   $(location).attr("href", "/manager");
 });
 
+var logoutDiv = $("<div>").addClass("logout btn-orange");
+var logoutLink = $("<a>").text("Logout").attr({ "href": "/logout", "id": "logout-link"});
+logoutDiv.append(logoutLink);
+$(".sidebar").append(logoutDiv);
+
 var itemTypes = function() {
   var header = $("<div>")
     .addClass("sub-header")
