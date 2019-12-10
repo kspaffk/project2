@@ -19,7 +19,9 @@ $(".sidebar-header").on("click", function() {
 });
 
 var logoutDiv = $("<div>").addClass("logout btn-orange");
-var logoutLink = $("<a>").text("Logout").attr({ "href": "/logout", "id": "logout-link"});
+var logoutLink = $("<a>")
+  .text("Logout")
+  .attr({ href: "/logout", id: "logout-link" });
 logoutDiv.append(logoutLink);
 $(".sidebar").append(logoutDiv);
 
@@ -52,6 +54,8 @@ var itemTypes = function() {
       url: "/api/itemTypes",
       contentType: "application/json",
       data: data
+    }).then(function() {
+      window.location.href = "/manager";
     });
   });
 };
@@ -94,9 +98,7 @@ var departments = function() {
       name: department.val().trim(),
       description: description.val().trim()
     };
-    submitData(newDepartment, "departments").then(function() {
-      $("input").val("");
-    });
+    submitData(newDepartment, "departments");
   });
 };
 
@@ -233,15 +235,7 @@ const createBackBtn = function() {
 };
 
 const submitData = function(post, dataType) {
-  $.post("/api/" + dataType, post);
-};
-
-const changeData = function(post, dataType) {
-  $.ajax({
-    method: "PUT",
-    url: "/api/" + dataType,
-    data: post
-  }).then(function() {
-    console.log("success?");
+  $.post("/api/" + dataType, post).then(function() {
+    window.location.href = "/manager";
   });
 };
