@@ -13,11 +13,10 @@ module.exports = function(app) {
     });
   });
 
-  app.put("/api/users", function(req, res) {
+  app.put("/api/user/:userID", function(req, res) {
     db.User.update(req.body, {
       where: {
-        department: req.body.department,
-        roleName: req.body.roleName
+        empID: req.params.userID
       }
     }).then(function(User) {
       res.json(User);

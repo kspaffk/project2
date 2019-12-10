@@ -107,15 +107,13 @@ var users = function() {
     );
   var dropdownContainer = $("<div>").addClass("dropdown-container");
   userDropdown = createDropdown("Users");
-  departmentDropdown = createDropdown("Departments");
-  rolesDropdown = createDropdown("Roles");
-  dropdownContainer.append(userDropdown, departmentDropdown, rolesDropdown);
+  dropdownContainer.append(userDropdown);
 
   var btnDiv = $("<div>").addClass("button-div");
   var button = $("<button>")
     .attr({
       type: "button",
-      id: "btn-submit"
+      id: "btn-select"
     })
     .addClass("btn-green")
     .text("Change user department and role");
@@ -127,23 +125,31 @@ var users = function() {
     dropdownContainer,
     btnDiv
   );
-  $("#btn-submit").on("click", function(event) {
-    var userEmpID = $("#select-Users").val();
-    var department = $("#select-Departments option:selected").val();
-    var role = $("#select-Roles option:selected").val();
-    var changeUser = {
-         empID: userEmpID,
-         department: department,
-         RoleId: role
-    };
-    console.log(changeUser);
-    
-    $.ajax({
-      type: "PUT",
-      url: "/api/users",
-      contentType: "application/json",
-      data: changeUser
-    }).then(function() {});
+  $("#btn-select").on("click", function(event) {
+    var userSelected = $("#select-Users").val();
+    $(".Users-drop, .btn-green").remove();
+    departmentDropdown = createDropdown("Departments");
+    roleDropdown = createDropdown("Roles");
+    var btnUpdate = $("<button>")
+      .addClass("btn-update btn-green")
+      .text("Update user");
+    $(".container").append(departmentDropdown, roleDropdown, btnUpdate);
+    $("#select-Roles, #select-Departments").select2();
+    $(".btn-update").on("click", function(event) {
+      var updateUserObj = {};
+      updateUserObj.RoleId = $("#select-Roles").val();
+      updateUserObj.DepartmentId = $("#select-Departments").val();
+      var userStr = JSON.stringify(updateUserObj);
+      console.log(userStr);
+      $.ajax({
+        type: "PUT",
+        url: "/api/user/" + userSelected,
+        contentType: "application/json",
+        data: userStr
+      }).then(function() {
+        window.location.href = "/manager";
+      });
+    });
   });
 };
 
