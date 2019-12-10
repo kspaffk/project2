@@ -3,15 +3,13 @@ $(document).ready(function() {
     $(".container").empty();
     departments();
   });
-  $(".roles").on("click", function(event) {
-    $(".container").empty();
-  });
   $(".types").on("click", function(event) {
     $(".container").empty();
     itemTypes();
   });
   $(".users").on("click", function(event) {
     $(".container").empty();
+    users();
   });
 });
 
@@ -69,8 +67,8 @@ var departments = function() {
       "<p>Enter the name and description of the department you wish to add</p>"
     );
 
-  var formContainer = createForm("Department");
-  var formContainer2 = createForm("Description");
+  var departmentForm = createForm("Department");
+  var descriptionForm = createForm("Description");
   var btnDiv = $("<div>").addClass("button-div");
   var button = $("<button>")
     .attr({
@@ -84,8 +82,8 @@ var departments = function() {
     header,
     errorDiv,
     instructions,
-    formContainer,
-    formContainer2,
+    departmentForm,
+    descriptionForm,
     btnDiv
   );
 
@@ -102,8 +100,62 @@ var departments = function() {
   });
 };
 
-const formatDate = function(dateStr) {
-  return moment(dateStr, "MM/DD/YYYY", false).format();
+var users = function() {
+  var header = $("<div>")
+    .addClass("sub-header")
+    .text("Edit users");
+  var errorDiv = $("<div>").addClass("error-txt");
+  var instructions = $("<div>")
+    .addClass("instructions")
+    .html(
+      "<p>Select the  department and role for the user you wish to change</p>"
+    );
+  var dropdownContainer = $("<div>").addClass("dropdown-container");
+  userDropdown = createDropdown("Users");
+  dropdownContainer.append(userDropdown);
+
+  var btnDiv = $("<div>").addClass("button-div");
+  var button = $("<button>")
+    .attr({
+      type: "button",
+      id: "btn-select"
+    })
+    .addClass("btn-green")
+    .text("Change user department and role");
+  btnDiv.append(button);
+  $(".container").append(
+    header,
+    errorDiv,
+    instructions,
+    dropdownContainer,
+    btnDiv
+  );
+  $("#btn-select").on("click", function(event) {
+    var userSelected = $("#select-Users").val();
+    $(".Users-drop, .btn-green").remove();
+    departmentDropdown = createDropdown("Departments");
+    roleDropdown = createDropdown("Roles");
+    var btnUpdate = $("<button>")
+      .addClass("btn-update btn-green")
+      .text("Update user");
+    $(".container").append(departmentDropdown, roleDropdown, btnUpdate);
+    $("#select-Roles, #select-Departments").select2();
+    $(".btn-update").on("click", function(event) {
+      var updateUserObj = {};
+      updateUserObj.RoleId = $("#select-Roles").val();
+      updateUserObj.DepartmentId = $("#select-Departments").val();
+      var userStr = JSON.stringify(updateUserObj);
+      console.log(userStr);
+      $.ajax({
+        type: "PUT",
+        url: "/api/user/" + userSelected,
+        contentType: "application/json",
+        data: userStr
+      }).then(function() {
+        window.location.href = "/manager";
+      });
+    });
+  });
 };
 
 const createDropdown = function(dataType) {
@@ -122,19 +174,20 @@ const createDropdown = function(dataType) {
         case "itemTypes":
           optionText = item.itemType;
           dataID = item.id;
+          break;
+        case "Roles":
+          optionText = item.roleName;
+          dataID = item.id;
           console.log(dataID);
           break;
-        case "roles":
-          optionText = item.roleName;
-          dataID = item.description;
-          break;
-        case "departments":
+        case "Departments":
           optionText = item.name;
-          dataID = item.description;
+          dataID = item.id;
+          console.log(dataID);
           break;
-        case "users":
+        case "Users":
           optionText = item.firstName + " " + item.lastName;
-          dataID = empID;
+          dataID = item.empID;
           break;
       }
       var option = $("<option>")
@@ -181,4 +234,14 @@ const createBackBtn = function() {
 
 const submitData = function(post, dataType) {
   $.post("/api/" + dataType, post);
+};
+
+const changeData = function(post, dataType) {
+  $.ajax({
+    method: "PUT",
+    url: "/api/" + dataType,
+    data: post
+  }).then(function() {
+    console.log("success?");
+  });
 };

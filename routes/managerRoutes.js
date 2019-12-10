@@ -1,44 +1,42 @@
 var db = require("../models");
 
 module.exports = function(app) {
-  app.get("/api/itemTypes", function(req, res) {
-    db.ItemType.findAndCountAll({
-      order: [["type", "ACS"]],
-      where: {
-        type: req.param.type
-      }
-    }).then(function(ItemType) {
-      console.log(ItemType.count);
-      console.log(ItemType.rows);
-      res.json(ItemType.rows);
-    });
-  });
-
   app.post("/api/itemTypes", function(req, res) {
     db.ItemType.create(req.body).then(function(ItemType) {
       res.json(ItemType);
     });
   });
 
-  app.put("/api/itemTypes", function(req, res) {
-    db.ItemType.update(req.body, {
-      where: {
-        type: req.param.type
-      }
-    }).then(function(ItemType) {
-      console.log(ItemType);
-      res.json(ItemType);
+  app.get("/api/users", function(req, res) {
+    db.User.findAll({}).then(function(User) {
+      res.json(User);
     });
   });
 
-  app.delete("/api/itemType/:id", function(req, res) {
-    db.ItemType.destroy({
+  app.put("/api/user/:userID", function(req, res) {
+    db.User.update(req.body, {
       where: {
-        id: req.param.id
+        empID: req.params.userID
       }
-    }).then(function(ItemType) {
-      console.log(ItemType);
-      res.json(ItemType);
+    }).then(function(User) {
+      res.json(User);
+    });
+  });
+
+  app.get("/api/roles", function(req, res) {
+    db.Role.findAll({})
+      .then(function(roles) {
+        console.log("Returning roles");
+        res.json(roles);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  });
+
+  app.get("/api/departments", function(req, res) {
+    db.Department.findAll({}).then(function(departments) {
+      res.json(departments);
     });
   });
 
@@ -48,37 +46,7 @@ module.exports = function(app) {
     });
   });
 
-  app.get("/api/users", function(req, res) {
-    db.User.findAll({
-      where: {
-        department: req.body.department,
-        assetID: req.body.assetID,
-        roleID: req.body.roleID
-      }
-    }).then(function(User) {
-      res.json(User);
-    });
-  });
-
-  app.put("/api/users", function(req, res) {
-    db.User.update(req.body, {
-      where: {
-        department: req.body.department,
-        assetID: req.body.assetID,
-        roleID: req.body.roleID
-      }
-    }).then(function(User) {
-      res.json(User);
-    });
-  });
-
-  app.delete("/api/users", function(req, res) {
-    db.User.destroy(req.body, {
-      where: {
-        id: req.params.id
-      }
-    }).then(function(User) {
-      res.json(User);
-    });
+  app.put("/api/departments", function(req, res) {
+    db.Department.update(req.body);
   });
 };
