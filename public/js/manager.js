@@ -9,6 +9,7 @@ $(document).ready(function() {
   });
   $(".users").on("click", function(event) {
     $(".container").empty();
+    users();
   });
 });
 
@@ -61,8 +62,8 @@ var departments = function() {
       "<p>Enter the name and description of the department you wish to add</p>"
     );
 
-  var formContainer = createForm("Department");
-  var formContainer2 = createForm("Description");
+  var departmentForm = createForm("Department");
+  var descriptionForm = createForm("Description");
   var btnDiv = $("<div>").addClass("button-div");
   var button = $("<button>")
     .attr({
@@ -76,8 +77,8 @@ var departments = function() {
     header,
     errorDiv,
     instructions,
-    formContainer,
-    formContainer2,
+    departmentForm,
+    descriptionForm,
     btnDiv
   );
 
@@ -105,10 +106,11 @@ var users = function() {
       "<p>Select the  department and role for the user you wish to change</p>"
     );
   var dropdownContainer = $("<div>").addClass("dropdown-container");
+  userDropdown = createDropdown("Users");
   departmentDropdown = createDropdown("Departments");
   rolesDropdown = createDropdown("Roles");
-  dropdownContainer.append(departmentDropdown, rolesDropdown);
-  
+  dropdownContainer.append(userDropdown, departmentDropdown, rolesDropdown);
+
   var btnDiv = $("<div>").addClass("button-div");
   var button = $("<button>")
     .attr({
@@ -116,31 +118,33 @@ var users = function() {
       id: "btn-submit"
     })
     .addClass("btn-green")
-    .text("Add Department and Description");
+    .text("Change user department and role");
   btnDiv.append(button);
   $(".container").append(
     header,
     errorDiv,
     instructions,
-    departmentDropdown,
-    rolesDropdown,
+    dropdownContainer,
     btnDiv
   );
   $("#btn-submit").on("click", function(event) {
-    var department = $("#Department");
-    var role = $("#Role");
+    var userEmpID = $("#select-Users").val();
+    var department = $("#select-Departments option:selected").val();
+    var role = $("#select-Roles option:selected").val();
     var changeUser = {
-      department: department.val(),
-      role: role.val()
+         empID: userEmpID,
+         department: department,
+         RoleId: role
     };
-    submitData(changeUser, "users").then(function() {
-      $("input").val("");
-    });
+    console.log(changeUser);
+    
+    $.ajax({
+      type: "PUT",
+      url: "/api/users",
+      contentType: "application/json",
+      data: changeUser
+    }).then(function() {});
   });
-};
-
-const formatDate = function(dateStr) {
-  return moment(dateStr, "MM/DD/YYYY", false).format();
 };
 
 const createDropdown = function(dataType) {
@@ -159,19 +163,20 @@ const createDropdown = function(dataType) {
         case "itemTypes":
           optionText = item.itemType;
           dataID = item.id;
+          break;
+        case "Roles":
+          optionText = item.roleName;
+          dataID = item.id;
           console.log(dataID);
           break;
-        case "roles":
-          optionText = item.roleName;
-          dataID = item.description;
-          break;
-        case "departments":
+        case "Departments":
           optionText = item.name;
-          dataID = item.description;
+          dataID = item.id;
+          console.log(dataID);
           break;
-        case "users":
+        case "Users":
           optionText = item.firstName + " " + item.lastName;
-          dataID = empID;
+          dataID = item.empID;
           break;
       }
       var option = $("<option>")
@@ -218,4 +223,14 @@ const createBackBtn = function() {
 
 const submitData = function(post, dataType) {
   $.post("/api/" + dataType, post);
+};
+
+const changeData = function(post, dataType) {
+  $.ajax({
+    method: "PUT",
+    url: "/api/" + dataType,
+    data: post
+  }).then(function() {
+    console.log("success?");
+  });
 };
