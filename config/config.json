@@ -1,14 +1,14 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "exampledb",
+    "username": "process.env.DB_USER",
+    "password": "process.env.DB_PASS",
+    "database": "inv_mgmt",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": null,
+    "password": "null",
     "database": "testdb",
     "host": "localhost",
     "dialect": "mysql",

@@ -1,27 +1,31 @@
-var db = require("../models");
+var auth = require("./auth");
+var whController = require("../controllers/warehouse");
 
 module.exports = function(app) {
-  // Load index page
-  app.get("/", function(req, res) {
-    db.Example.findAll({}).then(function(dbExamples) {
-      res.render("index", {
-        msg: "Welcome!",
-        examples: dbExamples
+    app.use("/auth", auth);
+    app.get('/logout', function(req, res){
+        req.logout();
+        res.redirect('/');
       });
+    app.get("*", function(req, res) {
+        if (!req.user) {
+            res.render("index");
+        } else {
+            if (req.user.RoleId == 1) {
+                res.render("manager");
+            } else if (req.user.RoleId == 3) {
+                res.render("warehouse");
+            } else {
+                var user = req.user;
+                whController.getAssignedAssets(user.empID, function(data) {
+                  var assetArray = [];
+                  data.forEach(asset => {
+                    assetArray.push(asset.dataValues);
+                  });
+                  hbsObject = { assets: assetArray, user: req.user }; 
+                  res.render("users", hbsObject);
+                });
+            }
+        }
     });
-  });
-
-  // Load example page and pass in an example by id
-  app.get("/example/:id", function(req, res) {
-    db.Example.findOne({ where: { id: req.params.id } }).then(function(dbExample) {
-      res.render("example", {
-        example: dbExample
-      });
-    });
-  });
-
-  // Render 404 page for any unmatched routes
-  app.get("*", function(req, res) {
-    res.render("404");
-  });
 };
