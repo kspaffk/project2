@@ -75,7 +75,14 @@ var returnAsset = function(object, cb) {
         });
 };
 
+var getAssignedAssets = function(empID, cb) {
+    models.Asset.findAll({ where: { UserEmpID: empID } }).then(function(data) {
+        cb(data);
+    });
+};
+
 exports.insertAsset = insertAsset;
 exports.assignAsset = assignAsset;
 exports.updateAsset = updateAsset;
 exports.returnAsset = returnAsset;
+exports.getAssignedAssets = getAssignedAssets;

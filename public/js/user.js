@@ -1,5 +1,4 @@
-// local storage
-var storage = window.localStorage;
-storage.setItem(dbUser, req.dbUser);       
-console.log(req.dbUser);
-console.log( storage.getItem( dbUser ));
+$(".sidebar-header").text("User Page");
+$(".sidebar-header").on("click", function() {
+    $(location).attr("href", "/users/");
+});
