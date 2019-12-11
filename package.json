@@ -18,7 +18,7 @@
     "express-session": "^1.17.0",
     "filedrop": "^2.0.0",
     "moment": "^2.24.0",
-    "mysql2": "^1.6.5",
+    "mysql2": "^2.0.2",
     "papaparse": "^5.1.0",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
