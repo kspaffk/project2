@@ -11,3 +11,5 @@ There will be three portals for each different type of user. Each one will provi
 
 ### Contributors
 Chris Laughter, Jake Beuchert, Matt Tarbet, Kent Spafford
+
+http://ec2-18-222-165-116.us-east-2.compute.amazonaws.com/
