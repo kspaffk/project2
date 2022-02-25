@@ -5,7 +5,7 @@ var router = express.Router();
 // Google Route used to sign in with google to begin with (google icon)
 router
   .route("/google/callback")
-  // Tell passport to use google strategy (JSON passed in) go to users route
+  // Tell passport to use google strategy (JSON passed in) go to login page
   .get(
     passport.authenticate("google", {
       successRedirect: "/",
